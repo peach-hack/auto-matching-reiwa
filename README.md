@@ -1,4 +1,4 @@
-Auto Maching(令和版)
+Auto Matching(令和版)
 ===
 
 ![](https://img.shields.io/github/issues/peach-hack/auto-matching-reiwa.svg)
