@@ -1,9 +1,9 @@
 Auto Maching(令和版)
 ===
 
-![](https://img.shields.io/github/issues/peach-hack/auto-matching-neo.svg)
-![](https://img.shields.io/github/license/peach-hack/auto-matching-neo.svg)
-[![Open Source Love](https://badges.frapsoft.com/os/v3/open-source.svg?v=103)](https://github.com/peach-hack/auto-matching-neo/)
+![](https://img.shields.io/github/issues/peach-hack/auto-matching-reiwa.svg)
+![](https://img.shields.io/github/license/peach-hack/auto-matching-reiwa.svg)
+[![Open Source Love](https://badges.frapsoft.com/os/v3/open-source.svg?v=103)](https://github.com/peach-hack/auto-matching-reiwa/)
 
 ## 概要
 
@@ -11,7 +11,7 @@ Auto Maching(令和版)
 
 出会い系マッチングサイトをAI、データ分析、自動化を駆使してハッキングするWebアプリです。平成の伝説のアプリ、[Auto Matching](https://github.com/peach-hack/auto-matching)を令和の時代に再定義し、一から再構築します。
 
-前回はビジネスやユーザを意識した方針で開発を進めましたしたが、今回はビジネスや他人のことは考えず、自分の欲しいものを自分のために開発します。開発言語は、ビジネスの世界では価値がないけれども、真のハッカーのみが操ることができる言語、Clojureを採用しようと思います。
+前回はビジネスやユーザを意識した方針で開発を進めましたしたが、今回はビジネスや他人のことは考えず、自分の欲しいものを自分のために開発します。開発言語は、ビジネスの世界では需要がないけれども、真のハッカーのみが操ることができる言語、Clojureを採用しようと思います。
 
 ### 対応サイト
 
