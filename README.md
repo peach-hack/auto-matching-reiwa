@@ -1,4 +1,4 @@
-Auto Maching Neo
+Auto Maching(令和版)
 ===
 
 ![](https://img.shields.io/github/issues/peach-hack/auto-matching-neo.svg)
@@ -7,9 +7,9 @@ Auto Maching Neo
 
 ## 概要
 
-次世代統合出会い系エンジン(IDE: Integreted Deai Engine Neo).
+次世代統合出会い系エンジン(IDE: Integreted Deai Engine).
 
-出会い系マッチングサイトをAI、データ分析、自動化を駆使してハッキングするWebアプリです。平成の伝説のアプリ、[Auto Matching](https://github.com/peach-hack/auto-matching)を令和の時代に再定義し、１から再構築します。さらに、古典的な掲示版型サイトに加えて、今回は東京オリンピックを視野に入れてTinderを攻略することを目指します。
+出会い系マッチングサイトをAI、データ分析、自動化を駆使してハッキングするWebアプリです。平成の伝説のアプリ、[Auto Matching](https://github.com/peach-hack/auto-matching)を令和の時代に再定義し、一から再構築します。さらに、古典的な掲示版型サイトに加えて、今回は東京オリンピックを視野に入れてTinderを攻略することを目指します。
 
 ### 対応サイト
 
