@@ -1,9 +1,8 @@
 Auto Matching(令和版)
 ===
 
-![](https://img.shields.io/github/issues/peach-hack/auto-matching-reiwa.svg)
-![](https://img.shields.io/github/license/peach-hack/auto-matching-reiwa.svg)
-[![Open Source Love](https://badges.frapsoft.com/os/v3/open-source.svg?v=103)](https://github.com/peach-hack/auto-matching-reiwa/)
+![](https://img.shields.io/github/issues/tsu-nera/auto-matching-reiwa.svg)
+[![Open Source Love](https://badges.frapsoft.com/os/v3/open-source.svg?v=103)](https://github.com/tsu-nera/auto-matching-reiwa/)
 
 ## 概要
 
@@ -28,4 +27,3 @@ Auto Matching(令和版)
 プロジェクトの達成が目的ではなくて、取り組みによる自己の成長が目的。
 
 予定通りに進まなくて回り道しても、学びがあればまったく順調である。
-
