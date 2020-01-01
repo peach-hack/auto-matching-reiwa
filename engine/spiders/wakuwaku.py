@@ -10,6 +10,10 @@ WAKUWAKU_ENTRY_URL = WAKUWAKU_BASE_URL + '/m'
 WAKUWAKU_LOGIN_URL = "https://login.550909.com/login/"
 
 
+def get_wakuwaku_board_url(genre):
+    return WAKUWAKU_ENTRY_URL + "/bbs/list?genre=" + str(genre)
+
+
 def authentication_failed(response):
     # TODO: Check the contents of the response and return True if it failed
     # or False if it succeeded.
@@ -32,13 +36,12 @@ class WakuwakuSpider(scrapy.Spider):
                                                 callback=self.after_login)
 
     def after_login(self, response):
-        after_login_url = response.url
-        wakuwaku_entry_url = after_login_url + "/m/"
         if authentication_failed(response):
             self.logger.error("Login failed")
             return
         else:
-            yield Request(url=wakuwaku_entry_url, callback=self.parse_board)
+            yield Request(url=get_wakuwaku_board_url(3),
+                          callback=self.parse_board)
 
     def parse_board(self, response):
         open_in_browser(response)
