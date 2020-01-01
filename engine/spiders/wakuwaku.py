@@ -2,6 +2,8 @@ import scrapy
 from scrapy.utils.response import open_in_browser
 from scrapy.http import Request
 
+import datetime
+
 import engine.env as env
 
 from ..items.post import PostItem
@@ -42,7 +44,7 @@ class WakuwakuSpider(scrapy.Spider):
             self.logger.error("Login failed")
             return
         else:
-            yield Request(url=get_wakuwaku_board_url(3),
+            yield Request(url=get_wakuwaku_board_url(3) + "&p=1",
                           callback=self.parse_board)
 
     def parse_board(self, response):
@@ -55,7 +57,7 @@ class WakuwakuSpider(scrapy.Spider):
 
             partial_url = item.css('a::attr(href)').extract_first()
 
-            post['id'] = int(partial_url.split('id=')[1])
+            post['id'] = partial_url.split('id=')[1]
             post["url"] = WAKUWAKU_BASE_URL + partial_url
 
             post["name"] = item.css('p.profile__name::text').extract_first()
@@ -68,8 +70,27 @@ class WakuwakuSpider(scrapy.Spider):
                 'div.profile__image').xpath('//img/@src').extract_first()
             post['age'] = item.css('span.profile__age::text').extract_first()
             post['title'] = item.css('p.profile__text::text').extract_first()
-            post['post_at'] = item.css(
-                'span.profile__date::text').extract_first()
+            post['post_at'] = item.css('p.profile__date::text').extract_first()
 
             yield post
+
+            now = datetime.datetime.now()
+            try:
+                post_at = datetime.datetime.strptime(post['post_at'],
+                                                     '%m/%d %H:%M')
+            except Exception:
+                post_at = datetime.datetime.strptime(post['post_at'],
+                                                     '%Y/%m/%d %H:%M')
+
+            if now.month == 1 and post_at.month == 12:
+                post_at = post_at.replace(year=now.year - 1)
+            else:
+                post_at = post_at.replace(year=now.year)
+
+            yesterday = now - datetime.timedelta(days=7)
+            if post_at > yesterday:
+                page_no = int(response.url.split("&p=")[1])
+                next_url = get_wakuwaku_board_url(3) + "&p=" + str(page_no + 1)
+                yield Request(url=next_url, callback=self.parse_board)
+
         # open_in_browser(response)
