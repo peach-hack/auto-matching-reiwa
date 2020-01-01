@@ -10,8 +10,9 @@ from ..items.post import PostItem
 
 HAPPYMAIL_DOMAIN = 'happymail.co.jp'
 HAPPYMAIL_BASE_URL = 'https://happymail.co.jp'
-HAPPYMAIL_ENTRY_URL = HAPPYMAIL_BASE_URL + '/sp'
 HAPPYMAIL_LOGIN_URL = "https://happymail.co.jp/sp/loginform.php"
+HAPPYMAIL_ENTRY_URL = HAPPYMAIL_BASE_URL + '/sp/app/html/'
+HAPPYMAIL_BOARD_URL = HAPPYMAIL_ENTRY_URL + "keijiban.php"
 
 
 def authentication_failed(response):
@@ -44,22 +45,23 @@ class HappymailSpider(scrapy.Spider):
             self.logger.error("Login failed")
             return
         else:
-            open_in_browser(response)
+            yield Request(HAPPYMAIL_BOARD_URL, self.set_area)
             # if self.area == "東京都":
             #     yield Request(WAKUWAKU_SETTING_TOKYO_URL, self.set_area)
             # else:
             #     yield Request(WAKUWAKU_SETTING_KANAGAWA_URL, self.set_area)
 
-    # def set_area(self, response):
-    #     board_url_list = [
-    #         WAKUWAKU_BOARD_SUGUAITAI_URL, WAKUWAKU_BOARD_KYOJANAIKEDO_URL,
-    #         WAKUWAKU_BOARD_ADULT_URL, WAKUWAKU_BOARD_OTONANOKOIBITOKOUHO_URL,
-    #         WAKUWAKU_BOARD_ABNORMAL_URL, WAKUWAKU_BOARD_MIDDLEAGE_URL,
-    #         WAKUWAKU_BOARD_KIKONSHA_URL
-    #     ]
+    def set_area(self, response):
+        open_in_browser(response)
+        # board_url_list = [
+        #     WAKUWAKU_BOARD_SUGUAITAI_URL, WAKUWAKU_BOARD_KYOJANAIKEDO_URL,
+        #     WAKUWAKU_BOARD_ADULT_URL, WAKUWAKU_BOARD_OTONANOKOIBITOKOUHO_URL,
+        #     WAKUWAKU_BOARD_ABNORMAL_URL, WAKUWAKU_BOARD_MIDDLEAGE_URL,
+        #     WAKUWAKU_BOARD_KIKONSHA_URL
+        # ]
 
-    #     for board_url in board_url_list:
-    #         yield Request(url=board_url + "&p=1", callback=self.parse_board)
+        # for board_url in board_url_list:
+        #     yield Request(url=board_url + "&p=1", callback=self.parse_board)
 
     # def parse_board(self, response):
     #     # open_in_browser(response)
