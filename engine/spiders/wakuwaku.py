@@ -1,5 +1,6 @@
 import scrapy
 from scrapy.utils.response import open_in_browser
+from scrapy.http import Request
 
 import engine.env as env
 
@@ -31,8 +32,13 @@ class WakuwakuSpider(scrapy.Spider):
                                                 callback=self.after_login)
 
     def after_login(self, response):
-        open_in_browser(response)
-
+        after_login_url = response.url
+        wakuwaku_entry_url = after_login_url + "/m/"
         if authentication_failed(response):
             self.logger.error("Login failed")
             return
+        else:
+            yield Request(url=wakuwaku_entry_url, callback=self.parse_board)
+
+    def parse_board(self, response):
+        open_in_browser(response)

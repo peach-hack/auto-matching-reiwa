@@ -1,6 +1,8 @@
+import invoke
 from invoke import task
 
 
 @task
-def build(c):
-    print("Building!")
+def crawl_wakuwaku(c):
+    command = "scrapy crawl wakuwaku"
+    invoke.run(command)
