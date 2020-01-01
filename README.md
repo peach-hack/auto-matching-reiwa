@@ -1,18 +1,17 @@
-Auto Matching(令和版)
-===
+# Auto Matching(令和版)
 
-![](https://img.shields.io/github/issues/tsu-nera/auto-matching-reiwa.svg)
-[![Open Source Love](https://badges.frapsoft.com/os/v3/open-source.svg?v=103)](https://github.com/tsu-nera/auto-matching-reiwa/)
+![](https://img.shields.io/github/issues/peach-hack/auto-matching-reiwa.svg)
+[![Open Source Love](https://badges.frapsoft.com/os/v3/open-source.svg?v=103)](https://github.com/peach-hack/auto-matching-reiwa/)
 
 ## 概要
 
 令和版統合出会い系エンジン(IDE: Integreted Deai Engine).
 
-出会い系マッチングサイトをAI、データ分析、自動化を駆使してハッキングするWebアプリです。平成の伝説のアプリ、[Auto Matching](https://github.com/peach-hack/auto-matching)を令和の時代に再定義し、一から再構築します。
+出会い系マッチングサイトを AI、データ分析、自動化を駆使してハッキングする Web アプリです。平成の伝説のアプリ、[Auto Matching](https://github.com/peach-hack/auto-matching)を令和の時代に再定義し、一から再構築します。
 
 ### 対応サイト
 
-古典的掲示版型サイトに加えて、今回は東京オリンピックを視野に入れてTinderを攻略することを目指します。
+古典的掲示版型サイトに加えて、今回は東京オリンピックを視野に入れて Tinder を攻略することを目指します。
 
 - [ハッピーメール](https://happymail.co.jp/?af14212217)
 - [ワクワクメール](https://550909.com/?f6858637)
