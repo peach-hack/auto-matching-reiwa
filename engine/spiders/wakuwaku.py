@@ -71,4 +71,5 @@ class WakuwakuSpider(scrapy.Spider):
             post['post_at'] = item.css(
                 'span.profile__date::text').extract_first()
 
+            yield post
         # open_in_browser(response)
