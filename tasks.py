@@ -15,7 +15,7 @@ def get_file_path(file_name):
     return RAWDATA_DIR + file_name
 
 
-def create_crawl_command(area, days, file_name, scrapy_name):
+def create_crawl_command(area, days, scrapy_name, file_name):
     return "scrapy crawl -a area={} -a days={} {} -o {}".format(
         area, days, scrapy_name, file_name)
 

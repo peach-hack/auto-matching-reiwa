@@ -10,7 +10,7 @@ from ..items.post import PostItem
 
 HAPPYMAIL_DOMAIN = 'happymail.co.jp'
 HAPPYMAIL_BASE_URL = 'https://happymail.co.jp'
-HAPPYMAIL_ENTRY_URL = BASE_URL + '/sp'
+HAPPYMAIL_ENTRY_URL = HAPPYMAIL_BASE_URL + '/sp'
 HAPPYMAIL_LOGIN_URL = "https://happymail.co.jp/sp/loginform.php"
 
 
