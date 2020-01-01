@@ -48,6 +48,9 @@ class WakuwakuSpider(scrapy.Spider):
                           callback=self.parse_board)
 
     def parse_board(self, response):
+        # open_in_browser(response)
+        # post_list = []
+
         post_list = response.css("ul.profile_list")
 
         for p in post_list:
@@ -66,8 +69,13 @@ class WakuwakuSpider(scrapy.Spider):
             post["city"] = item.css(
                 'span.profile__address::text').extract_first()
 
-            post["image_url"] = WAKUWAKU_BASE_URL + item.css(
-                'div.profile__image').xpath('//img/@src').extract_first()
+            image_url = item.css('div.profile__image').css(
+                'img::attr(src)').extract_first()
+            if 'thumbnail_no_image.png' in image_url:
+                post[
+                    'image_url'] = WAKUWAKU_BASE_URL + "/img/wmsp/common/thumbnail_no_image.png"  # noqa
+            else:
+                post['image_url'] = image_url
             post['age'] = item.css('span.profile__age::text').extract_first()
             post['title'] = item.css('p.profile__text::text').extract_first()
             post['post_at'] = item.css('p.profile__date::text').extract_first()
@@ -92,5 +100,3 @@ class WakuwakuSpider(scrapy.Spider):
                 page_no = int(response.url.split("&p=")[1])
                 next_url = get_wakuwaku_board_url(3) + "&p=" + str(page_no + 1)
                 yield Request(url=next_url, callback=self.parse_board)
-
-        # open_in_browser(response)
