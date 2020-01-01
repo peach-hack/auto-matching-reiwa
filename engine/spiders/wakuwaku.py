@@ -1,5 +1,5 @@
 import scrapy
-from scrapy.utils.response import open_in_browser
+# from scrapy.utils.response import open_in_browser
 from scrapy.http import Request
 
 import datetime
@@ -28,12 +28,6 @@ WAKUWAKU_BOARD_OTONANOKOIBITOKOUHO_URL = get_wakuwaku_board_url(6)
 WAKUWAKU_BOARD_ABNORMAL_URL = get_wakuwaku_board_url(8)
 WAKUWAKU_BOARD_MIDDLEAGE_URL = get_wakuwaku_board_url(15)
 WAKUWAKU_BOARD_KIKONSHA_URL = get_wakuwaku_board_url(21)
-
-
-def authentication_failed(response):
-    # TODO: Check the contents of the response and return True if it failed
-    # or False if it succeeded.
-    pass
 
 
 class WakuwakuSpider(scrapy.Spider):
