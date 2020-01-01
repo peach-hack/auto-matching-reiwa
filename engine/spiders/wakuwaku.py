@@ -21,6 +21,15 @@ def get_wakuwaku_board_url(genre):
     return WAKUWAKU_ENTRY_URL + "/bbs/list?genre=" + str(genre)
 
 
+WAKUWAKU_BOARD_SUGUAITAI_URL = get_wakuwaku_board_url(3)
+WAKUWAKU_BOARD_KYOJANAIKEDO_URL = get_wakuwaku_board_url(20)
+WAKUWAKU_BOARD_ADULT_URL = get_wakuwaku_board_url(4)
+WAKUWAKU_BOARD_OTONANOKOIBITOKOUHO_URL = get_wakuwaku_board_url(6)
+WAKUWAKU_BOARD_ABNORMAL_URL = get_wakuwaku_board_url(8)
+WAKUWAKU_BOARD_MIDDLEAGE_URL = get_wakuwaku_board_url(15)
+WAKUWAKU_BOARD_KIKONSHA_URL = get_wakuwaku_board_url(21)
+
+
 def authentication_failed(response):
     # TODO: Check the contents of the response and return True if it failed
     # or False if it succeeded.
@@ -58,8 +67,15 @@ class WakuwakuSpider(scrapy.Spider):
                 yield Request(WAKUWAKU_SETTING_KANAGAWA_URL, self.set_area)
 
     def set_area(self, response):
-        yield Request(url=get_wakuwaku_board_url(3) + "&p=1",
-                      callback=self.parse_board)
+        board_url_list = [
+            WAKUWAKU_BOARD_SUGUAITAI_URL, WAKUWAKU_BOARD_KYOJANAIKEDO_URL,
+            WAKUWAKU_BOARD_ADULT_URL, WAKUWAKU_BOARD_OTONANOKOIBITOKOUHO_URL,
+            WAKUWAKU_BOARD_ABNORMAL_URL, WAKUWAKU_BOARD_MIDDLEAGE_URL,
+            WAKUWAKU_BOARD_KIKONSHA_URL
+        ]
+
+        for board_url in board_url_list:
+            yield Request(url=board_url + "&p=1", callback=self.parse_board)
 
     def parse_board(self, response):
         # open_in_browser(response)
