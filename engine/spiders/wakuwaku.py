@@ -13,6 +13,9 @@ WAKUWAKU_BASE_URL = 'https://550909.com'
 WAKUWAKU_ENTRY_URL = WAKUWAKU_BASE_URL + '/m'
 WAKUWAKU_LOGIN_URL = "https://login.550909.com/login/"
 
+WAKUWAKU_SETTING_TOKYO_URL = WAKUWAKU_ENTRY_URL + "/setting/set_city?mode=area&city=237&pref=14"  # noqa 東京都渋谷区
+WAKUWAKU_SETTING_KANAGAWA_URL = WAKUWAKU_ENTRY_URL + "/setting/set_city?mode=area&city=892&pref=13"  # noqa 神奈川県川崎市中原区
+
 
 def get_wakuwaku_board_url(genre):
     return WAKUWAKU_ENTRY_URL + "/bbs/list?genre=" + str(genre)
@@ -29,6 +32,11 @@ class WakuwakuSpider(scrapy.Spider):
     allowed_domains = [WAKUWAKU_DOMAIN]
     start_urls = [WAKUWAKU_LOGIN_URL]
 
+    def __init__(self, area="神奈川県", days=7, *args, **kwargs):
+        super(WakuwakuSpider, self).__init__(*args, **kwargs)
+        self.area = area
+        self.days = int(days)
+
     def parse(self, response):
         return scrapy.FormRequest.from_response(response,
                                                 formdata={
@@ -44,8 +52,14 @@ class WakuwakuSpider(scrapy.Spider):
             self.logger.error("Login failed")
             return
         else:
-            yield Request(url=get_wakuwaku_board_url(3) + "&p=1",
-                          callback=self.parse_board)
+            if self.area == "東京都":
+                yield Request(WAKUWAKU_SETTING_TOKYO_URL, self.set_area)
+            else:
+                yield Request(WAKUWAKU_SETTING_KANAGAWA_URL, self.set_area)
+
+    def set_area(self, response):
+        yield Request(url=get_wakuwaku_board_url(3) + "&p=1",
+                      callback=self.parse_board)
 
     def parse_board(self, response):
         # open_in_browser(response)
@@ -64,8 +78,9 @@ class WakuwakuSpider(scrapy.Spider):
             post["url"] = WAKUWAKU_BASE_URL + partial_url
 
             post["name"] = item.css('p.profile__name::text').extract_first()
-            post["prefecture"] = "神奈川県"
-            post["genre"] = 3
+            post["prefecture"] = self.area
+            post["genre"] = item.css(
+                'p.icon_bbs_category::text').extract_first()
             post["city"] = item.css(
                 'span.profile__address::text').extract_first()
 
@@ -95,8 +110,8 @@ class WakuwakuSpider(scrapy.Spider):
             else:
                 post_at = post_at.replace(year=now.year)
 
-            yesterday = now - datetime.timedelta(days=7)
-            if post_at > yesterday:
+            days_ago = now - datetime.timedelta(days=self.days)
+            if post_at > days_ago:
                 page_no = int(response.url.split("&p=")[1])
                 next_url = get_wakuwaku_board_url(3) + "&p=" + str(page_no + 1)
                 yield Request(url=next_url, callback=self.parse_board)
