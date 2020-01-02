@@ -9,7 +9,7 @@ function main(splash, args)
   splash:evaljs("document.querySelector('input[name=TelNo]').value = 'happymail_tel_no'")
   splash:evaljs("document.querySelector('input[name=Pass]').value = 'happymail_password'")
   splash:evaljs("document.querySelector('a#login_btn').click()")
-  assert(splash:wait(0.5))
+  assert(splash:wait(3))
 
   splash:evaljs("document.querySelectorAll('a.nav')[2].click()")
   assert(splash:wait(5))
@@ -19,12 +19,12 @@ function main(splash, args)
   -- すぐ会いたいを選択
   -- splash:evaljs("document.querySelector('.billboard-genre-tab-203').click()")
 
-  assert(splash:wait(0.5))
+  assert(splash:wait(1))
 
   -- load more
   for i = 1, 35 do
     splash:evaljs("document.querySelector('.list_load').click()")
-    assert(splash:wait(0.5))
+    assert(splash:wait(1))
   end
 
   -- 日付操作はLuaでは面倒そうなので、とりあえず決め打ちループで。

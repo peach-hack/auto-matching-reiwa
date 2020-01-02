@@ -12,6 +12,7 @@ HAPPYMAIL_BASE_URL = 'https://happymail.co.jp'
 HAPPYMAIL_LOGIN_URL = "https://happymail.co.jp/sp/loginform.php"
 HAPPYMAIL_ENTRY_URL = HAPPYMAIL_BASE_URL + '/sp/app/html/'
 HAPPYMAIL_BOARD_URL = HAPPYMAIL_ENTRY_URL + "keijiban.php"
+HAPPYMAIL_AREA_URL = HAPPYMAIL_ENTRY_URL + "area.php"
 
 
 class HappymailSpider(InitSpider):
@@ -25,13 +26,30 @@ class HappymailSpider(InitSpider):
         self.days = int(days)
 
     def parse(self, response):
+        #     script = open('./engine/spiders/lua/happymail_set_area.lua').read()
+        #     script = script.replace("happymail_tel_no", env.HAPPYMAIL_LOGIN_USER)
+        #     script = script.replace("happymail_password",
+        #                             env.HAPPYMAIL_LOGIN_PASSWORD)
+
+        #     yield SplashRequest(
+        #         HAPPYMAIL_AREA_URL,
+        #         self.read_board,
+        #         endpoint='execute',
+        #         args={
+        #             'wait': 0.5,
+        #             'lua_source': script,
+        #             'timeout': 3600
+        #         },
+        #     )
+
+        # def read_board(self, response):
         script = open('./engine/spiders/lua/happymail_read_board.lua').read()
         script = script.replace("happymail_tel_no", env.HAPPYMAIL_LOGIN_USER)
         script = script.replace("happymail_password",
                                 env.HAPPYMAIL_LOGIN_PASSWORD)
 
         yield SplashRequest(
-            response.url,
+            HAPPYMAIL_BOARD_URL,
             self.parse_board,
             endpoint='execute',
             args={
