@@ -63,8 +63,17 @@ class HappymailSpider(scrapy.Spider):
             EC.presence_of_element_located(
                 (By.CSS_SELECTOR, "p.ds_user_display_name")))
 
+        # 地域の選択
+        self.driver.get(HAPPYMAIL_AREA_URL)
+        selector = 'input#area-14-temporary' if self.area == "東京都" else 'input#area-13-temporary'  # noqa
+        script = "document.querySelector('{}').click();".format(selector)
+        self.driver.execute_script(script)
+        script = "document.querySelector('button.ds_round_btn_shadow_blue').click();"  # noqa
+        self.driver.execute_script(script)
+
+        time.sleep(5)
+
         # 掲示板へ移動
-        # self.driver.find_elements_by_css_selector('.ds_nav_item')[2].click()
         self.driver.get(HAPPYMAIL_BOARD_URL)
         # その他掲示板を選択
         self.driver.find_elements_by_css_selector(
