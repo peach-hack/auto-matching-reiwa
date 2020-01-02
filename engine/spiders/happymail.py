@@ -25,7 +25,7 @@ class HappymailSpider(InitSpider):
         self.days = int(days)
 
     def parse(self, response):
-        script = open('./engine/spiders/lua/click_radio_button.lua').read()
+        script = open('./engine/spiders/lua/happymail_read_board.lua').read()
         script = script.replace("happymail_tel_no", env.HAPPYMAIL_LOGIN_USER)
         script = script.replace("happymail_password",
                                 env.HAPPYMAIL_LOGIN_PASSWORD)
