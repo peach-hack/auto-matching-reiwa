@@ -106,37 +106,37 @@ class PcmaxSpider(scrapy.Spider):
             self.driver.execute_script(script)
             time.sleep(3)
 
-        print("finish")
-        return
+        response_body = self.driver.page_source.encode('cp932', 'ignore')
+        response = response.replace(body=response_body)
 
-        response = response.replace(body=self.driver.page_source)
-
-        post_list = ""
+        post_list = response.css('.item_box')
 
         for item in post_list:
             post = PostItem()
 
-            post['id'] = ""
-            post["url"] = ""
+            id = item.css('.search_btn>a::attr(onclick)').re_first(
+                'viewBbs\((.*)\)')  # noqa
 
-            post["name"] = ""
+            if id is None:
+                continue
+
+            post['id'] = id
+            post['profile_id'] = item.css(
+                '.search_btn>a::attr(id)').extract_first()
+            post["url"] = "https://pcmax.jp/mobile/bbs_detail.php?bbs_id=" + id
+
+            post["name"] = item.css(
+                'span.value1>span>font::text').extract_first()
             post["prefecture"] = self.area
 
-            post["genre"] = ""
+            post["genre"] = item.css('span.value1::text')[4].extract()
 
-            post["city"] = ""
-            post["age"] = ""
+            post["city"] = item.css('span.value1::text')[2].extract()
+            post["age"] = item.css('span.value1::text')[1].extract().strip(
+                '\xa0')
 
-            image_url = ""
-            if 'noimage' in image_url:
-                post['image_url'] = "https:" + image_url
-            elif 'avatar' in image_url:
-                post['image_url'] = "https:" + image_url
-            else:
-                post['image_url'] = image_url
-
-            post['title'] = ""
-            post['post_at'] = ""
+            post['title'] = item.css('.title_link::text').extract_first()
+            post['post_at'] = item.css('span.value1::text')[3].extract()
 
             yield post
 

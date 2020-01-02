@@ -71,39 +71,39 @@ def crawl_wakuwaku_kanagawa(c, days):
     crawl_base_kanagawa(days, name)
 
 
-def crawl_happymail(c, days):
+def crawl_happymail(c):
     name = "happymail"
-    crawl_base(days, name)
+    crawl_base(1, name)
 
 
 @task
-def crawl_happymail_tokyo(c, days):
+def crawl_happymail_tokyo(c):
     name = "happymail"
-    crawl_base_tokyo(days, name)
+    crawl_base_tokyo(1, name)
 
 
 @task
-def crawl_happymail_kanagawa(c, days):
+def crawl_happymail_kanagawa(c):
     name = "happymail"
-    crawl_base_kanagawa(days, name)
+    crawl_base_kanagawa(1, name)
 
 
 @task
-def crawl_pcmax(c, days):
+def crawl_pcmax(c):
     name = "pcmax"
-    crawl_base(days, name)
+    crawl_base(1, name)
 
 
 @task
-def crawl_pcmax_tokyo(c, days):
+def crawl_pcmax_tokyo(c):
     name = "pcmax"
-    crawl_base_tokyo(days, name)
+    crawl_base_tokyo(1, name)
 
 
 @task
-def crawl_pcmax_kanagawa(c, days):
+def crawl_pcmax_kanagawa(c):
     name = "pcmax"
-    crawl_base_kanagawa(days, name)
+    crawl_base_kanagawa(1, name)
 
 
 @task
