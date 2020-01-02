@@ -33,7 +33,7 @@ class HappymailSpider(scrapy.Spider):
 
         options = ChromeOptions()
 
-        # options.add_argument("--headless")
+        options.add_argument("--headless")
 
         options.add_argument('--user-agent={}'.format(USER_AGENT_PIXEL3))
 
