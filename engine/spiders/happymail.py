@@ -20,7 +20,9 @@ HAPPYMAIL_BASE_URL = 'https://happymail.co.jp'
 HAPPYMAIL_LOGIN_URL = "https://happymail.co.jp/login/?Log=newpc"
 HAPPYMAIL_ENTRY_URL = HAPPYMAIL_BASE_URL + '/sp/app/html/'
 HAPPYMAIL_BOARD_URL = HAPPYMAIL_ENTRY_URL + "keijiban.php"
-HAPPYMAIL_BOARD_URL = HAPPYMAIL_ENTRY_URL + "area.php"
+HAPPYMAIL_AREA_URL = HAPPYMAIL_ENTRY_URL + "area.php"
+
+import time
 
 
 class HappymailSpider(scrapy.Spider):
@@ -57,9 +59,18 @@ class HappymailSpider(scrapy.Spider):
             env.HAPPYMAIL_LOGIN_PASSWORD)
         self.driver.find_element_by_id("login_btn").click()
 
-        WebDriverWait(self.driver, 30).until(
+        WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located(
                 (By.CSS_SELECTOR, "p.ds_user_display_name")))
+
+        # 掲示板へ移動
+        # self.driver.find_elements_by_css_selector('.ds_nav_item')[2].click()
+        self.driver.get(HAPPYMAIL_BOARD_URL)
+        # その他掲示板を選択
+        self.driver.find_elements_by_css_selector(
+            'li.ds_link_tab_item_bill')[1].click()
+
+        time.sleep(5)
 
     def closed(self, reason):
         self.driver.close()
