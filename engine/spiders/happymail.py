@@ -1,10 +1,7 @@
 import scrapy
-from scrapy.utils.response import open_in_browser
-from scrapy.http import Request
+# from scrapy.utils.response import open_in_browser
 from scrapy.spiders.init import InitSpider
 from scrapy_splash import SplashRequest
-
-import datetime
 
 import engine.env as env
 
@@ -17,12 +14,6 @@ HAPPYMAIL_ENTRY_URL = HAPPYMAIL_BASE_URL + '/sp/app/html/'
 HAPPYMAIL_BOARD_URL = HAPPYMAIL_ENTRY_URL + "keijiban.php"
 
 
-def authentication_failed(response):
-    # TODO: Check the contents of the response and return True if it failed
-    # or False if it succeeded.
-    pass
-
-
 class HappymailSpider(InitSpider):
     name = 'happymail'
     allowed_domains = [HAPPYMAIL_DOMAIN]
@@ -32,18 +23,6 @@ class HappymailSpider(InitSpider):
         super(HappymailSpider, self).__init__(*args, **kwargs)
         self.area = area
         self.days = int(days)
-
-    # def init_request(self):
-    #     yield scrapy.Request(HAPPYMAIL_LOGIN_URL, callback=self.login)
-
-    # def login(self, response):
-    #     return scrapy.FormRequest.from_response(
-    #         response,
-    #         formdata={
-    #             'TelNo': env.HAPPYMAIL_LOGIN_USER,
-    #             'Pass': env.HAPPYMAIL_LOGIN_PASSWORD
-    #         },
-    #         callback=self.initialized)
 
     def parse(self, response):
         script = open('./engine/spiders/lua/click_radio_button.lua').read()
