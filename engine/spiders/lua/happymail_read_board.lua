@@ -1,3 +1,14 @@
+function try(tryFun)
+  local suc, err = pcall(tryFun)
+  return {
+    catch = function(catchFun)
+      if not suc then
+        catchFun(err)
+      end
+    end
+  }
+end
+
 function main(splash, args)
   splash:set_user_agent(
     "Mozilla/5.0 (Linux; Android 10; Pixel 3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.93 Mobile Safari/537.36"
@@ -19,12 +30,20 @@ function main(splash, args)
   -- すぐ会いたいを選択
   -- splash:evaljs("document.querySelector('.billboard-genre-tab-203').click()")
 
-  assert(splash:wait(1))
+  assert(splash:wait(2))
 
   -- load more
   for i = 1, 35 do
-    splash:evaljs("document.querySelector('.list_load').click()")
-    assert(splash:wait(1))
+    try(
+      function()
+        splash:evaljs("document.querySelector('.list_load').click()")
+        assert(splash:wait(2))
+      end
+    ).catch(
+      function(e)
+        return splash:html()
+      end
+    )
   end
 
   -- 日付操作はLuaでは面倒そうなので、とりあえず決め打ちループで。

@@ -1,5 +1,5 @@
 import scrapy
-# from scrapy.utils.response import open_in_browser
+from scrapy.utils.response import open_in_browser
 from scrapy.spiders.init import InitSpider
 from scrapy_splash import SplashRequest
 
