@@ -12,13 +12,21 @@ function main(splash, args)
   assert(splash:wait(0.5))
 
   splash:evaljs("document.querySelectorAll('a.nav')[2].click()")
-  assert(splash:wait(2))
+  assert(splash:wait(5))
 
   -- その他掲示板を選択
   splash:evaljs("document.querySelectorAll('li.ds_link_tab_item_bill')[1].click()")
   -- すぐ会いたいを選択
   -- splash:evaljs("document.querySelector('.billboard-genre-tab-203').click()")
 
+  assert(splash:wait(0.5))
+
+  -- load more
+  splash:evaljs("document.querySelector('.list_load').click()")
+  assert(splash:wait(0.5))
+  splash:evaljs("document.querySelector('.list_load').click()")
+  assert(splash:wait(0.5))
+  splash:evaljs("document.querySelector('.list_load').click()")
   assert(splash:wait(0.5))
 
   return splash:html()
