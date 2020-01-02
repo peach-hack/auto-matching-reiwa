@@ -1,21 +1,15 @@
 # -*- coding: utf-8 -*-
+from .constants.common import USER_AGENT_PIXEL3
 
-# Scrapy settings for engine project
-#
-# For simplicity, this file contains only settings considered important or
-# commonly used. You can find more settings consulting the documentation:
-#
-#     https://doc.scrapy.org/en/latest/topics/settings.html
-#     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-#     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
+# Scrapy settings for engine proje
 
 BOT_NAME = 'engine'
 
 SPIDER_MODULES = ['engine.spiders']
 NEWSPIDER_MODULE = 'engine.spiders'
 
-# Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'engine (+http://www.yourdomain.com)'
+# Google Pixel 3
+USER_AGENT = USER_AGENT_PIXEL3
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False

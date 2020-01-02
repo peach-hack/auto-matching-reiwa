@@ -22,15 +22,15 @@ def create_crawl_command(area, days, scrapy_name, file_name):
 
 def crawl_base(days, name):
     rawdata_kanagawa = get_file_path(get_file_name_kanagawa(name))
-    rawdata_tokyo = get_file_path(get_file_name_tokyo(name))
+    # rawdata_tokyo = get_file_path(get_file_name_tokyo(name))
 
     try:
         invoke.run('rm {}'.format(rawdata_kanagawa))
-        invoke.run('rm {}'.format(rawdata_tokyo))
+        # invoke.run('rm {}'.format(rawdata_tokyo))
     except Exception:
         pass
     invoke.run(create_crawl_command("神奈川県", days, name, rawdata_kanagawa))
-    invoke.run(create_crawl_command("東京都", days, name, rawdata_tokyo))
+    # invoke.run(create_crawl_command("東京都", days, name, rawdata_tokyo))
 
 
 @task

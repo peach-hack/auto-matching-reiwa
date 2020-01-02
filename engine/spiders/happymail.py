@@ -2,23 +2,25 @@ import scrapy
 from scrapy.utils.response import open_in_browser
 from scrapy.http import Request
 
-import datetime
+# import datetime
+
+from selenium.webdriver import Chrome, ChromeOptions
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 
 import engine.env as env
 
 from ..items.post import PostItem
+from ..constants.common import USER_AGENT_PIXEL3
 
 HAPPYMAIL_DOMAIN = 'happymail.co.jp'
 HAPPYMAIL_BASE_URL = 'https://happymail.co.jp'
-HAPPYMAIL_LOGIN_URL = "https://happymail.co.jp/sp/loginform.php"
+HAPPYMAIL_LOGIN_URL = "https://happymail.co.jp/login/?Log=newpc"
 HAPPYMAIL_ENTRY_URL = HAPPYMAIL_BASE_URL + '/sp/app/html/'
 HAPPYMAIL_BOARD_URL = HAPPYMAIL_ENTRY_URL + "keijiban.php"
-
-
-def authentication_failed(response):
-    # TODO: Check the contents of the response and return True if it failed
-    # or False if it succeeded.
-    pass
+HAPPYMAIL_BOARD_URL = HAPPYMAIL_ENTRY_URL + "area.php"
 
 
 class HappymailSpider(scrapy.Spider):
@@ -31,89 +33,33 @@ class HappymailSpider(scrapy.Spider):
         self.area = area
         self.days = int(days)
 
+        options = ChromeOptions()
+
+        # options.add_argument("--headless")
+
+        options.add_argument('--user-agent={}'.format(USER_AGENT_PIXEL3))
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("disable-infobars")
+        options.add_argument("--disable-extensions")
+        options.add_argument("--disable-gpu")
+
+        self.driver = Chrome(options=options)
+
     def parse(self, response):
-        return scrapy.FormRequest.from_response(
-            response,
-            formdata={
-                'TelNo': env.HAPPYMAIL_LOGIN_USER,
-                'Pass': env.HAPPYMAIL_LOGIN_PASSWORD
-            },
-            callback=self.after_login)
 
-    def after_login(self, response):
-        if authentication_failed(response):
-            self.logger.error("Login failed")
-            return
-        else:
-            yield Request(HAPPYMAIL_BOARD_URL, self.set_area)
-            # if self.area == "東京都":
-            #     yield Request(WAKUWAKU_SETTING_TOKYO_URL, self.set_area)
-            # else:
-            #     yield Request(WAKUWAKU_SETTING_KANAGAWA_URL, self.set_area)
+        # Login
+        self.driver.get(response.url)
 
-    def set_area(self, response):
-        open_in_browser(response)
-        # board_url_list = [
-        #     WAKUWAKU_BOARD_SUGUAITAI_URL, WAKUWAKU_BOARD_KYOJANAIKEDO_URL,
-        #     WAKUWAKU_BOARD_ADULT_URL, WAKUWAKU_BOARD_OTONANOKOIBITOKOUHO_URL,
-        #     WAKUWAKU_BOARD_ABNORMAL_URL, WAKUWAKU_BOARD_MIDDLEAGE_URL,
-        #     WAKUWAKU_BOARD_KIKONSHA_URL
-        # ]
+        self.driver.find_element_by_name("TelNo").send_keys(
+            env.HAPPYMAIL_LOGIN_USER)
+        self.driver.find_element_by_name("Pass").send_keys(
+            env.HAPPYMAIL_LOGIN_PASSWORD)
+        self.driver.find_element_by_id("login_btn").click()
 
-        # for board_url in board_url_list:
-        #     yield Request(url=board_url + "&p=1", callback=self.parse_board)
+        WebDriverWait(self.driver, 30).until(
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, "p.ds_user_display_name")))
 
-    # def parse_board(self, response):
-    #     # open_in_browser(response)
-    #     # post_list = []
-
-    #     post_list = response.css("ul.profile_list")
-
-    #     for p in post_list:
-    #         post = PostItem()
-
-    #         item = p.css("div.profile__item")
-
-    #         partial_url = item.css('a::attr(href)').extract_first()
-
-    #         post['id'] = partial_url.split('id=')[1]
-    #         post["url"] = WAKUWAKU_BASE_URL + partial_url
-
-    #         post["name"] = item.css('p.profile__name::text').extract_first()
-    #         post["prefecture"] = self.area
-    #         post["genre"] = item.css(
-    #             'p.icon_bbs_category::text').extract_first()
-    #         post["city"] = item.css(
-    #             'span.profile__address::text').extract_first()
-
-    #         image_url = item.css('div.profile__image').css(
-    #             'img::attr(src)').extract_first()
-    #         if 'thumbnail_no_image.png' in image_url:
-    #             post[
-    #                 'image_url'] = WAKUWAKU_BASE_URL + "/img/wmsp/common/thumbnail_no_image.png"  # noqa
-    #         else:
-    #             post['image_url'] = image_url
-    #         post['age'] = item.css('span.profile__age::text').extract_first()
-    #         post['title'] = item.css('p.profile__text::text').extract_first()
-    #         post['post_at'] = item.css('p.profile__date::text').extract_first()
-
-    #         yield post
-
-    #         now = datetime.datetime.now()
-    #         try:
-    #             post_at = datetime.datetime.strptime(post['post_at'],
-    #                                                  '%m/%d %H:%M')
-    #         except Exception:
-    #             post_at = datetime.datetime.strptime(post['post_at'],
-    #                                                  '%Y/%m/%d %H:%M')
-
-    #         if now.month == 1 and post_at.month == 12:
-    #             post_at = post_at.replace(year=now.year - 1)
-    #         else:
-    #             post_at = post_at.replace(year=now.year)
-
-    #         days_ago = now - datetime.timedelta(days=self.days)
-    #         if post_at > days_ago:
-    #             page_no = int(response.url.split("&p=")[1])
-    #             next_url = get_wakuwaku_board_url(3) + "&p=" + str(page_no + 1)
-    #             yield Request(url=next_url, callback=self.parse_board)
+    def closed(self, reason):
+        self.driver.close()
