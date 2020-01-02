@@ -62,46 +62,46 @@ class HappymailSpider(InitSpider):
         )
 
     def parse_board(self, response):
-        open_in_browser(response)
+        # open_in_browser(response)
 
-    # def parse_board(self, response):
-    #
+        post_list = response.css("li.ds_user_post_link_item_bill")
 
-    # def parse_board(self, response):
-    #     # open_in_browser(response)
-    #     # post_list = []
+        for item in post_list:
+            post = PostItem()
 
-    #     post_list = response.css("ul.profile_list")
+            partial_url = item.css('a::attr(href)').extract_first()
 
-    #     for p in post_list:
-    #         post = PostItem()
+            post['id'] = partial_url.split('tid=')[1]
+            post["url"] = "https:" + partial_url
 
-    #         item = p.css("div.profile__item")
+            post["name"] = item.css(
+                '.ds_post_body_name_bill::text').extract_first().strip(
+                    '♀\xa0')  # noqa
+            post["prefecture"] = self.area
 
-    #         partial_url = item.css('a::attr(href)').extract_first()
+            post["genre"] = item.css('p.round-btn::text').extract_first()
 
-    #         post['id'] = partial_url.split('id=')[1]
-    #         post["url"] = WAKUWAKU_BASE_URL + partial_url
+            age_info = item.css(
+                '.ds_post_body_age::text').extract_first().split(
+                    '\xa0')  # noqa
+            post["city"] = age_info[1]
+            post["age"] = age_info[0]
 
-    #         post["name"] = item.css('p.profile__name::text').extract_first()
-    #         post["prefecture"] = self.area
-    #         post["genre"] = item.css(
-    #             'p.icon_bbs_category::text').extract_first()
-    #         post["city"] = item.css(
-    #             'span.profile__address::text').extract_first()
+            image_url = item.css(
+                '.ds_thum_contain_s::attr(style)').extract_first().strip(
+                    'background-image: url(').strip(')')
 
-    #         image_url = item.css('div.profile__image').css(
-    #             'img::attr(src)').extract_first()
-    #         if 'thumbnail_no_image.png' in image_url:
-    #             post[
-    #                 'image_url'] = WAKUWAKU_BASE_URL + "/img/wmsp/common/thumbnail_no_image.png"  # noqa
-    #         else:
-    #             post['image_url'] = image_url
-    #         post['age'] = item.css('span.profile__age::text').extract_first()
-    #         post['title'] = item.css('p.profile__text::text').extract_first()
-    #         post['post_at'] = item.css('p.profile__date::text').extract_first()
+            if 'noimage' in image_url:
+                post['image_url'] = "https:" + image_url
+            elif 'avatar' in image_url:
+                post['image_url'] = "https:" + image_url
+            else:
+                post['image_url'] = image_url
 
-    #         yield post
+            post['title'] = item.css('.ds_post_title::text').extract_first()
+            post['post_at'] = item.css('.ds_post_date::text').extract_first()
+
+            yield post
 
     #         now = datetime.datetime.now()
     #         try:

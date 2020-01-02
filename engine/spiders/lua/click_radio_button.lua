@@ -12,7 +12,7 @@ function main(splash, args)
   assert(splash:wait(0.5))
 
   splash:evaljs("document.querySelectorAll('a.nav')[2].click()")
-  assert(splash:wait(1))
+  assert(splash:wait(2))
 
   -- その他掲示板を選択
   splash:evaljs("document.querySelectorAll('li.ds_link_tab_item_bill')[1].click()")
