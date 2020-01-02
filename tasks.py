@@ -30,7 +30,7 @@ def crawl_base(days, name):
     except Exception:
         pass
     invoke.run(create_crawl_command("神奈川県", days, name, rawdata_kanagawa))
-    invoke.run(create_crawl_command("東京都", days, name, rawdata_tokyo))
+    # invoke.run(create_crawl_command("東京都", days, name, rawdata_tokyo))
 
 
 @task

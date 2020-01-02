@@ -1,6 +1,7 @@
 import scrapy
 from scrapy.utils.response import open_in_browser
 from scrapy.http import Request
+from scrapy.spiders.init import InitSpider
 
 import datetime
 
@@ -21,38 +22,44 @@ def authentication_failed(response):
     pass
 
 
-class HappymailSpider(scrapy.Spider):
+class HappymailSpider(InitSpider):
     name = 'happymail'
     allowed_domains = [HAPPYMAIL_DOMAIN]
-    start_urls = [HAPPYMAIL_LOGIN_URL]
+    start_urls = [HAPPYMAIL_BOARD_URL]
 
     def __init__(self, area="神奈川県", days=7, *args, **kwargs):
         super(HappymailSpider, self).__init__(*args, **kwargs)
         self.area = area
         self.days = int(days)
 
-    def parse(self, response):
+    def init_request(self):
+        yield scrapy.Request(HAPPYMAIL_LOGIN_URL, callback=self.login)
+
+    def login(self, response):
         return scrapy.FormRequest.from_response(
             response,
             formdata={
                 'TelNo': env.HAPPYMAIL_LOGIN_USER,
                 'Pass': env.HAPPYMAIL_LOGIN_PASSWORD
             },
-            callback=self.after_login)
+            callback=self.initialized)
 
-    def after_login(self, response):
-        if authentication_failed(response):
-            self.logger.error("Login failed")
-            return
-        else:
-            yield Request(HAPPYMAIL_BOARD_URL, self.set_area)
-            # if self.area == "東京都":
-            #     yield Request(WAKUWAKU_SETTING_TOKYO_URL, self.set_area)
-            # else:
-            #     yield Request(WAKUWAKU_SETTING_KANAGAWA_URL, self.set_area)
+    def parse(self, response):
+        open_in_browser(response)
+
+        # if authentication_failed(response):
+        #     self.logger.error("Login failed")
+        #     return
+        # else:
+        #     pass
+        # yield Request(HAPPYMAIL_BOARD_URL, self.set_area)
+        # if self.area == "東京都":
+        #     yield Request(WAKUWAKU_SETTING_TOKYO_URL, self.set_area)
+        # else:
+        #     yield Request(WAKUWAKU_SETTING_KANAGAWA_URL, self.set_area)
 
     def set_area(self, response):
-        open_in_browser(response)
+        # open_in_browser(response)
         # board_url_list = [
         #     WAKUWAKU_BOARD_SUGUAITAI_URL, WAKUWAKU_BOARD_KYOJANAIKEDO_URL,
         #     WAKUWAKU_BOARD_ADULT_URL, WAKUWAKU_BOARD_OTONANOKOIBITOKOUHO_URL,
