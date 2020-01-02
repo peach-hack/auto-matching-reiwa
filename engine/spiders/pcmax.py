@@ -1,12 +1,13 @@
 import scrapy
 
 import time
-# import datetime
 
 from selenium.webdriver import Chrome, ChromeOptions
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import Select
+from selenium.common.exceptions import NoSuchElementException
 
 import engine.env as env
 
@@ -17,8 +18,7 @@ PCMAX_DOMAIN = 'pcmax.jp'
 PCMAX_BASE_URL = 'https://pcmax.jp'
 PCMAX_LOGIN_URL = "https://pcmax.jp/pcm/index.php"
 PCMAX_ENTRY_URL = PCMAX_LOGIN_URL
-PCMAX_BOARD_URL = ""
-PCMAX_AREA_URL = ""
+PCMAX_BOARD_URL = "https://pcmax.jp/mobile/bbs_reference.php"
 
 
 class PcmaxSpider(scrapy.Spider):
@@ -60,58 +60,74 @@ class PcmaxSpider(scrapy.Spider):
             env.PCMAX_LOGIN_PASSWORD)
         self.driver.find_element_by_name("login").click()
 
-        time.sleep(5)
-        return
+        time.sleep(1)
 
         # 掲示板へ移動
         self.driver.get(PCMAX_BOARD_URL)
-        # その他掲示板を選択
-        self.driver.find_elements_by_css_selector(
-            'li.ds_link_tab_item_bill')[1].click()
 
+        time.sleep(1)
+
+        # カテゴリの選択
+        # スグ会いたいは defaultで選択されている
+
+        def select_category(n):
+            script = 'document.querySelector("#bbs_category{}").click()'.format(  # noqa
+                n)
+            self.driver.execute_script(script)
+
+        select_category(3)  # スグじゃないけど
+        select_category(8)  # 既婚者OK
+        select_category(21)  # 変態さん募集
+
+        # 地域を選択
+        pref_no = "22" if self.area == "東京都" else "23"
+        element = self.driver.find_element_by_name('pref_no')
+        select_element = Select(element)
+        select_element.select_by_value(pref_no)
+
+        # 40歳以上を検索から除外
+        element = self.driver.find_element_by_name('to_age')
+        select_element = Select(element)
+        select_element.select_by_value("40")
+
+        # 検索実行
+        self.driver.find_element_by_name("search").click()
         time.sleep(5)
 
-        try:
-            while True:
-                # ブラウザ有効のときはこれをコメントアウトすると下にスクロールする。
-                # headlessのときはエラーするので注意
-                script = 'window.scrollTo(0, document.body.scrollHeight);'
-                self.driver.execute_script(script)
-                script = 'document.querySelector("div#load_list_billboard_200.list_load").click();'  # noqa
-                self.driver.execute_script(script)
-                time.sleep(3)
-        except Exception:
-            pass
+        def is_scroll_end():
+            try:
+                self.driver.find_element_by_id('ajax-message')
+            except NoSuchElementException:
+                return False
+            return True
+
+        while not is_scroll_end():
+            script = 'window.scrollTo(0, document.body.scrollHeight);'
+            self.driver.execute_script(script)
+            time.sleep(3)
+
+        print("finish")
+        return
 
         response = response.replace(body=self.driver.page_source)
 
-        post_list = response.css("li.ds_user_post_link_item_bill")
+        post_list = ""
 
         for item in post_list:
             post = PostItem()
 
-            partial_url = item.css('a::attr(href)').extract_first()
+            post['id'] = ""
+            post["url"] = ""
 
-            post['id'] = partial_url.split('tid=')[1]
-            post["url"] = "https:" + partial_url
-
-            post["name"] = item.css(
-                '.ds_post_body_name_bill::text').extract_first().strip(
-                    '♀\xa0')  # noqa
+            post["name"] = ""
             post["prefecture"] = self.area
 
-            post["genre"] = item.css('p.round-btn::text').extract_first()
+            post["genre"] = ""
 
-            age_info = item.css(
-                '.ds_post_body_age::text').extract_first().split(
-                    '\xa0')  # noqa
-            post["city"] = age_info[1]
-            post["age"] = age_info[0]
+            post["city"] = ""
+            post["age"] = ""
 
-            image_url = item.css(
-                '.ds_thum_contain_s::attr(style)').extract_first().strip(
-                    'background-image: url(').strip(')')
-
+            image_url = ""
             if 'noimage' in image_url:
                 post['image_url'] = "https:" + image_url
             elif 'avatar' in image_url:
@@ -119,8 +135,8 @@ class PcmaxSpider(scrapy.Spider):
             else:
                 post['image_url'] = image_url
 
-            post['title'] = item.css('.ds_post_title::text').extract_first()
-            post['post_at'] = item.css('.ds_post_date::text').extract_first()
+            post['title'] = ""
+            post['post_at'] = ""
 
             yield post
 

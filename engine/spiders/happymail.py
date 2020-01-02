@@ -83,8 +83,6 @@ class HappymailSpider(scrapy.Spider):
 
         try:
             while True:
-                # ブラウザ有効のときはこれをコメントアウトすると下にスクロールする。
-                # headlessのときはエラーするので注意
                 script = 'window.scrollTo(0, document.body.scrollHeight);'
                 self.driver.execute_script(script)
                 script = 'document.querySelector("div#load_list_billboard_200.list_load").click();'  # noqa
