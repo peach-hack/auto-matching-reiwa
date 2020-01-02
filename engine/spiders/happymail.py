@@ -2,6 +2,7 @@ import scrapy
 from scrapy.utils.response import open_in_browser
 from scrapy.http import Request
 from scrapy.spiders.init import InitSpider
+from scrapy_splash import SplashRequest
 
 import datetime
 
@@ -32,43 +33,39 @@ class HappymailSpider(InitSpider):
         self.area = area
         self.days = int(days)
 
-    def init_request(self):
-        yield scrapy.Request(HAPPYMAIL_LOGIN_URL, callback=self.login)
+    # def init_request(self):
+    #     yield scrapy.Request(HAPPYMAIL_LOGIN_URL, callback=self.login)
 
-    def login(self, response):
-        return scrapy.FormRequest.from_response(
-            response,
-            formdata={
-                'TelNo': env.HAPPYMAIL_LOGIN_USER,
-                'Pass': env.HAPPYMAIL_LOGIN_PASSWORD
-            },
-            callback=self.initialized)
+    # def login(self, response):
+    #     return scrapy.FormRequest.from_response(
+    #         response,
+    #         formdata={
+    #             'TelNo': env.HAPPYMAIL_LOGIN_USER,
+    #             'Pass': env.HAPPYMAIL_LOGIN_PASSWORD
+    #         },
+    #         callback=self.initialized)
 
     def parse(self, response):
+        script = open('./engine/spiders/lua/click_radio_button.lua').read()
+        script = script.replace("happymail_tel_no", env.HAPPYMAIL_LOGIN_USER)
+        script = script.replace("happymail_password",
+                                env.HAPPYMAIL_LOGIN_PASSWORD)
+
+        yield SplashRequest(
+            response.url,
+            self.parse_board,
+            endpoint='execute',
+            args={
+                'wait': 0.5,
+                'lua_source': script,
+            },
+        )
+
+    def parse_board(self, response):
         open_in_browser(response)
 
-        # if authentication_failed(response):
-        #     self.logger.error("Login failed")
-        #     return
-        # else:
-        #     pass
-        # yield Request(HAPPYMAIL_BOARD_URL, self.set_area)
-        # if self.area == "東京都":
-        #     yield Request(WAKUWAKU_SETTING_TOKYO_URL, self.set_area)
-        # else:
-        #     yield Request(WAKUWAKU_SETTING_KANAGAWA_URL, self.set_area)
-
-    def set_area(self, response):
-        # open_in_browser(response)
-        # board_url_list = [
-        #     WAKUWAKU_BOARD_SUGUAITAI_URL, WAKUWAKU_BOARD_KYOJANAIKEDO_URL,
-        #     WAKUWAKU_BOARD_ADULT_URL, WAKUWAKU_BOARD_OTONANOKOIBITOKOUHO_URL,
-        #     WAKUWAKU_BOARD_ABNORMAL_URL, WAKUWAKU_BOARD_MIDDLEAGE_URL,
-        #     WAKUWAKU_BOARD_KIKONSHA_URL
-        # ]
-
-        # for board_url in board_url_list:
-        #     yield Request(url=board_url + "&p=1", callback=self.parse_board)
+    # def parse_board(self, response):
+    #
 
     # def parse_board(self, response):
     #     # open_in_browser(response)
