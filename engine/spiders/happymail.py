@@ -58,6 +58,7 @@ class HappymailSpider(InitSpider):
             args={
                 'wait': 0.5,
                 'lua_source': script,
+                'timeout': 3600
             },
         )
 
@@ -102,22 +103,3 @@ class HappymailSpider(InitSpider):
             post['post_at'] = item.css('.ds_post_date::text').extract_first()
 
             yield post
-
-    #         now = datetime.datetime.now()
-    #         try:
-    #             post_at = datetime.datetime.strptime(post['post_at'],
-    #                                                  '%m/%d %H:%M')
-    #         except Exception:
-    #             post_at = datetime.datetime.strptime(post['post_at'],
-    #                                                  '%Y/%m/%d %H:%M')
-
-    #         if now.month == 1 and post_at.month == 12:
-    #             post_at = post_at.replace(year=now.year - 1)
-    #         else:
-    #             post_at = post_at.replace(year=now.year)
-
-    #         days_ago = now - datetime.timedelta(days=self.days)
-    #         if post_at > days_ago:
-    #             page_no = int(response.url.split("&p=")[1])
-    #             next_url = get_wakuwaku_board_url(3) + "&p=" + str(page_no + 1)
-    #             yield Request(url=next_url, callback=self.parse_board)

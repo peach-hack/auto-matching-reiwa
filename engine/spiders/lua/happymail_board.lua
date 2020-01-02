@@ -22,12 +22,13 @@ function main(splash, args)
   assert(splash:wait(0.5))
 
   -- load more
-  splash:evaljs("document.querySelector('.list_load').click()")
-  assert(splash:wait(0.5))
-  splash:evaljs("document.querySelector('.list_load').click()")
-  assert(splash:wait(0.5))
-  splash:evaljs("document.querySelector('.list_load').click()")
-  assert(splash:wait(0.5))
+  for i = 1, 35 do
+    splash:evaljs("document.querySelector('.list_load').click()")
+    assert(splash:wait(0.5))
+  end
+
+  -- 日付操作はLuaでは面倒そうなので、とりあえず決め打ちループで。
+  -- local datetime = splash:evaljs("document.querySelector('.ds_post_date').innerText")
 
   return splash:html()
 end

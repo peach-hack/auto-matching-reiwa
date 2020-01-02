@@ -55,3 +55,9 @@ def crawl_pcmax(c, days):
 def crawl_ikukuru(c, days):
     name = "ikukuru"
     crawl_base(days, name)
+
+
+@task
+def start_splash_server(c):
+    command = "docker run -p 8050:8050 scrapinghub/splash --max-timeout 3600"
+    invoke.run(command)
