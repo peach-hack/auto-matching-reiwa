@@ -1,24 +1,24 @@
 import scrapy
-from scrapy.utils.response import open_in_browser
-from scrapy.http import Request
 
-import datetime
+import time
+# import datetime
+
+from selenium.webdriver import Chrome, ChromeOptions
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 
 import engine.env as env
 
 from ..items.post import PostItem
+from ..constants.common import USER_AGENT_PIXEL3
 
 HAPPYMAIL_DOMAIN = 'happymail.co.jp'
 HAPPYMAIL_BASE_URL = 'https://happymail.co.jp'
-HAPPYMAIL_LOGIN_URL = "https://happymail.co.jp/sp/loginform.php"
+HAPPYMAIL_LOGIN_URL = "https://happymail.co.jp/login/?Log=newpc"
 HAPPYMAIL_ENTRY_URL = HAPPYMAIL_BASE_URL + '/sp/app/html/'
 HAPPYMAIL_BOARD_URL = HAPPYMAIL_ENTRY_URL + "keijiban.php"
-
-
-def authentication_failed(response):
-    # TODO: Check the contents of the response and return True if it failed
-    # or False if it succeeded.
-    pass
+HAPPYMAIL_AREA_URL = HAPPYMAIL_ENTRY_URL + "area.php"
 
 
 class HappymailSpider(scrapy.Spider):
@@ -31,89 +31,108 @@ class HappymailSpider(scrapy.Spider):
         self.area = area
         self.days = int(days)
 
+        options = ChromeOptions()
+
+        options.add_argument("--headless")
+
+        options.add_argument('--user-agent={}'.format(USER_AGENT_PIXEL3))
+
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("disable-infobars")
+        options.add_argument("--disable-extensions")
+        options.add_argument("--disable-gpu")
+
+        mobile_emulation = {"deviceName": "Nexus 5"}
+        options.add_experimental_option("mobileEmulation", mobile_emulation)
+
+        self.driver = Chrome(options=options)
+
     def parse(self, response):
-        return scrapy.FormRequest.from_response(
-            response,
-            formdata={
-                'TelNo': env.HAPPYMAIL_LOGIN_USER,
-                'Pass': env.HAPPYMAIL_LOGIN_PASSWORD
-            },
-            callback=self.after_login)
 
-    def after_login(self, response):
-        if authentication_failed(response):
-            self.logger.error("Login failed")
-            return
-        else:
-            yield Request(HAPPYMAIL_BOARD_URL, self.set_area)
-            # if self.area == "東京都":
-            #     yield Request(WAKUWAKU_SETTING_TOKYO_URL, self.set_area)
-            # else:
-            #     yield Request(WAKUWAKU_SETTING_KANAGAWA_URL, self.set_area)
+        # Login
+        self.driver.get(response.url)
 
-    def set_area(self, response):
-        open_in_browser(response)
-        # board_url_list = [
-        #     WAKUWAKU_BOARD_SUGUAITAI_URL, WAKUWAKU_BOARD_KYOJANAIKEDO_URL,
-        #     WAKUWAKU_BOARD_ADULT_URL, WAKUWAKU_BOARD_OTONANOKOIBITOKOUHO_URL,
-        #     WAKUWAKU_BOARD_ABNORMAL_URL, WAKUWAKU_BOARD_MIDDLEAGE_URL,
-        #     WAKUWAKU_BOARD_KIKONSHA_URL
-        # ]
+        self.driver.find_element_by_name("TelNo").send_keys(
+            env.HAPPYMAIL_LOGIN_USER)
+        self.driver.find_element_by_name("Pass").send_keys(
+            env.HAPPYMAIL_LOGIN_PASSWORD)
+        self.driver.find_element_by_id("login_btn").click()
 
-        # for board_url in board_url_list:
-        #     yield Request(url=board_url + "&p=1", callback=self.parse_board)
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, "p.ds_user_display_name")))
 
-    # def parse_board(self, response):
-    #     # open_in_browser(response)
-    #     # post_list = []
+        # 地域の選択
+        self.driver.get(HAPPYMAIL_AREA_URL)
+        selector = 'input#area-14-temporary' if self.area == "東京都" else 'input#area-13-temporary'  # noqa
+        script = "document.querySelector('{}').click();".format(selector)
+        self.driver.execute_script(script)
+        script = "document.querySelector('button.ds_round_btn_shadow_blue').click();"  # noqa
+        self.driver.execute_script(script)
 
-    #     post_list = response.css("ul.profile_list")
+        time.sleep(5)
 
-    #     for p in post_list:
-    #         post = PostItem()
+        # 掲示板へ移動
+        self.driver.get(HAPPYMAIL_BOARD_URL)
+        # その他掲示板を選択
+        self.driver.find_elements_by_css_selector(
+            'li.ds_link_tab_item_bill')[1].click()
 
-    #         item = p.css("div.profile__item")
+        time.sleep(5)
 
-    #         partial_url = item.css('a::attr(href)').extract_first()
+        try:
+            while True:
+                # ブラウザ有効のときはこれをコメントアウトすると下にスクロールする。
+                # headlessのときはエラーするので注意
+                script = 'window.scrollTo(0, document.body.scrollHeight);'
+                self.driver.execute_script(script)
+                script = 'document.querySelector("div#load_list_billboard_200.list_load").click();'  # noqa
+                self.driver.execute_script(script)
+                time.sleep(3)
+        except Exception:
+            pass
 
-    #         post['id'] = partial_url.split('id=')[1]
-    #         post["url"] = WAKUWAKU_BASE_URL + partial_url
+        response = response.replace(body=self.driver.page_source)
 
-    #         post["name"] = item.css('p.profile__name::text').extract_first()
-    #         post["prefecture"] = self.area
-    #         post["genre"] = item.css(
-    #             'p.icon_bbs_category::text').extract_first()
-    #         post["city"] = item.css(
-    #             'span.profile__address::text').extract_first()
+        post_list = response.css("li.ds_user_post_link_item_bill")
 
-    #         image_url = item.css('div.profile__image').css(
-    #             'img::attr(src)').extract_first()
-    #         if 'thumbnail_no_image.png' in image_url:
-    #             post[
-    #                 'image_url'] = WAKUWAKU_BASE_URL + "/img/wmsp/common/thumbnail_no_image.png"  # noqa
-    #         else:
-    #             post['image_url'] = image_url
-    #         post['age'] = item.css('span.profile__age::text').extract_first()
-    #         post['title'] = item.css('p.profile__text::text').extract_first()
-    #         post['post_at'] = item.css('p.profile__date::text').extract_first()
+        for item in post_list:
+            post = PostItem()
 
-    #         yield post
+            partial_url = item.css('a::attr(href)').extract_first()
 
-    #         now = datetime.datetime.now()
-    #         try:
-    #             post_at = datetime.datetime.strptime(post['post_at'],
-    #                                                  '%m/%d %H:%M')
-    #         except Exception:
-    #             post_at = datetime.datetime.strptime(post['post_at'],
-    #                                                  '%Y/%m/%d %H:%M')
+            post['id'] = partial_url.split('tid=')[1]
+            post["url"] = "https:" + partial_url
 
-    #         if now.month == 1 and post_at.month == 12:
-    #             post_at = post_at.replace(year=now.year - 1)
-    #         else:
-    #             post_at = post_at.replace(year=now.year)
+            post["name"] = item.css(
+                '.ds_post_body_name_bill::text').extract_first().strip(
+                    '♀\xa0')  # noqa
+            post["prefecture"] = self.area
 
-    #         days_ago = now - datetime.timedelta(days=self.days)
-    #         if post_at > days_ago:
-    #             page_no = int(response.url.split("&p=")[1])
-    #             next_url = get_wakuwaku_board_url(3) + "&p=" + str(page_no + 1)
-    #             yield Request(url=next_url, callback=self.parse_board)
+            post["genre"] = item.css('p.round-btn::text').extract_first()
+
+            age_info = item.css(
+                '.ds_post_body_age::text').extract_first().split(
+                    '\xa0')  # noqa
+            post["city"] = age_info[1]
+            post["age"] = age_info[0]
+
+            image_url = item.css(
+                '.ds_thum_contain_s::attr(style)').extract_first().strip(
+                    'background-image: url(').strip(')')
+
+            if 'noimage' in image_url:
+                post['image_url'] = "https:" + image_url
+            elif 'avatar' in image_url:
+                post['image_url'] = "https:" + image_url
+            else:
+                post['image_url'] = image_url
+
+            post['title'] = item.css('.ds_post_title::text').extract_first()
+            post['post_at'] = item.css('.ds_post_date::text').extract_first()
+
+            yield post
+
+    def closed(self, reason):
+        self.driver.close()

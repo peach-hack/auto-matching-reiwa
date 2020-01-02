@@ -33,16 +33,47 @@ def crawl_base(days, name):
     invoke.run(create_crawl_command("東京都", days, name, rawdata_tokyo))
 
 
+def crawl_base_kanagawa(days, name):
+    rawdata_kanagawa = get_file_path(get_file_name_kanagawa(name))
+
+    try:
+        invoke.run('rm {}'.format(rawdata_kanagawa))
+    except Exception:
+        pass
+    invoke.run(create_crawl_command("神奈川県", days, name, rawdata_kanagawa))
+
+
+def crawl_base_tokyo(days, name):
+    rawdata_tokyo = get_file_path(get_file_name_tokyo(name))
+
+    try:
+        invoke.run('rm {}'.format(rawdata_tokyo))
+    except Exception:
+        pass
+    invoke.run(create_crawl_command("東京都", days, name, rawdata_tokyo))
+
+
 @task
 def crawl_wakuwaku(c, days):
     name = "wakuwaku"
     crawl_base(days, name)
 
 
-@task
 def crawl_happymail(c, days):
     name = "happymail"
     crawl_base(days, name)
+
+
+@task
+def crawl_happymail_tokyo(c, days):
+    name = "happymail"
+    crawl_base_tokyo(days, name)
+
+
+@task
+def crawl_happymail_kanagawa(c, days):
+    name = "happymail"
+    crawl_base_kanagawa(days, name)
 
 
 @task
