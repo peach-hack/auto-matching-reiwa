@@ -51,14 +51,10 @@ class WakuwakuSpider(scrapy.Spider):
                                                 callback=self.after_login)
 
     def after_login(self, response):
-        if authentication_failed(response):
-            self.logger.error("Login failed")
-            return
+        if self.area == "東京都":
+            yield Request(WAKUWAKU_SETTING_TOKYO_URL, self.set_area)
         else:
-            if self.area == "東京都":
-                yield Request(WAKUWAKU_SETTING_TOKYO_URL, self.set_area)
-            else:
-                yield Request(WAKUWAKU_SETTING_KANAGAWA_URL, self.set_area)
+            yield Request(WAKUWAKU_SETTING_KANAGAWA_URL, self.set_area)
 
     def set_area(self, response):
         board_url_list = [
