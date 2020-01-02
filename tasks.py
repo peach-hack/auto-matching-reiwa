@@ -59,6 +59,18 @@ def crawl_wakuwaku(c, days):
     crawl_base(days, name)
 
 
+@task
+def crawl_wakuwaku_tokyo(c, days):
+    name = "wakuwaku"
+    crawl_base_tokyo(days, name)
+
+
+@task
+def crawl_wakuwaku_kanagawa(c, days):
+    name = "wakuwaku"
+    crawl_base_kanagawa(days, name)
+
+
 def crawl_happymail(c, days):
     name = "happymail"
     crawl_base(days, name)
@@ -83,6 +95,30 @@ def crawl_pcmax(c, days):
 
 
 @task
+def crawl_pcmax_tokyo(c, days):
+    name = "pcmax"
+    crawl_base_tokyo(days, name)
+
+
+@task
+def crawl_pcmax_kanagawa(c, days):
+    name = "pcmax"
+    crawl_base_kanagawa(days, name)
+
+
+@task
 def crawl_ikukuru(c, days):
     name = "ikukuru"
     crawl_base(days, name)
+
+
+@task
+def crawl_ikukuru_tokyo(c, days):
+    name = "ikukuru"
+    crawl_base_tokyo(days, name)
+
+
+@task
+def crawl_ikukuru_kanagawa(c, days):
+    name = "ikukuru"
+    crawl_base_kanagawa(days, name)
