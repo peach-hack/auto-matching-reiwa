@@ -14,6 +14,13 @@ SELECT
     updated_at
 FROM
     posts
+WHERE
+    NOT EXISTS( SELECT 
+            word
+        FROM
+            ng_words
+        WHERE
+            title LIKE CONCAT('%', word, '%'))
 ORDER BY posted_at DESC
 LIMIT 10000
 ;
