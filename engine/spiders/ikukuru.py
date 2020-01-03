@@ -116,21 +116,21 @@ class IkukuruSpider(scrapy.Spider):
 
             yield post
 
-        # now = datetime.datetime.now()
-        # try:
-        #     post_at = datetime.datetime.strptime(last_post_at, '%m/%d %H:%M')
-        # except Exception:
-        #     post_at = datetime.datetime.strptime(last_post_at,
-        #                                          '%Y/%m/%d %H:%M')
+        now = datetime.datetime.now()
+        try:
+            post_at = datetime.datetime.strptime(last_post_at, '%m/%d %H:%M')
+        except Exception:
+            post_at = datetime.datetime.strptime(last_post_at,
+                                                 '%Y/%m/%d %H:%M')
 
-        # if now.month == 1 and post_at.month == 12:
-        #     post_at = post_at.replace(year=now.year - 1)
-        # else:
-        #     post_at = post_at.replace(year=now.year)
-        # days_ago = now - datetime.timedelta(days=self.days)
+        if now.month == 1 and post_at.month == 12:
+            post_at = post_at.replace(year=now.year - 1)
+        else:
+            post_at = post_at.replace(year=now.year)
+        days_ago = now - datetime.timedelta(days=self.days)
 
-        # if post_at > days_ago:
-        #     partial_url = response.css(
-        #         '.nextBtn>a::attr(href)').extract_first()
-        #     next_url = "https://sp.194964.com/bbs/show_bbs.html" + partial_url  # noqa
-        #     yield Request(url=next_url, callback=self.parse_board)
+        if post_at > days_ago:
+            partial_url = response.css(
+                '.nextBtn>a::attr(href)').extract_first()
+            next_url = "https://sp.194964.com/bbs/show_bbs.html" + partial_url  # noqa
+            yield Request(url=next_url, callback=self.parse_board)
