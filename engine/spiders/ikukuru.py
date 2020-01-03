@@ -73,7 +73,7 @@ class IkukuruSpider(scrapy.Spider):
             yield Request(url=board_url, callback=self.parse_board)
 
     def parse_board(self, response):
-        time.sleep(1)
+        time.sleep(2)
         post_list = response.css(".refinedBbsDesign.bgMiddle")
 
         if len(post_list) == 0:
