@@ -138,6 +138,8 @@ class PcmaxSpider(scrapy.Spider):
             post['title'] = item.css('.title_link::text').extract_first()
             post['post_at'] = item.css('span.value1::text')[3].extract()
 
+            post['site'] = "PCMAX"
+
             yield post
 
     def closed(self, reason):

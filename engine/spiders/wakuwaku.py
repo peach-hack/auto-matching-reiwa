@@ -104,6 +104,8 @@ class WakuwakuSpider(scrapy.Spider):
             post['title'] = item.css('p.profile__text::text').extract_first()
             post['post_at'] = item.css('p.profile__date::text').extract_first()
 
+            post['site'] = "ワクワクメール"
+
             last_post_at = post['post_at']
             yield post
 
