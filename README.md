@@ -5,6 +5,7 @@
 
 * Pyhton 3.7.4
 * Scrapy 1.6.0
+* MySQL 8.0.18
 
 ## 概要
 
@@ -36,6 +37,9 @@
 * matplotlib
 * flake8
 * yapf
+* mysqlclient
+* alembic
+* sqlalchemy
 
 ## 出会い系大手４サイトの統計データ分析
 
