@@ -1,0 +1,22 @@
+USE auto_matching;
+
+INSERT IGNORE INTO ng_words VALUES ('セフ');
+INSERT IGNORE INTO ng_words VALUES ('ニューハーフ');
+INSERT IGNORE INTO ng_words VALUES ('下着');
+INSERT IGNORE INTO ng_words VALUES ('生');
+INSERT IGNORE INTO ng_words VALUES ('ftm');
+INSERT IGNORE INTO ng_words VALUES ('MTF');
+INSERT IGNORE INTO ng_words VALUES ('ビッチ');
+INSERT IGNORE INTO ng_words VALUES ('お願い');
+INSERT IGNORE INTO ng_words VALUES ('イラマ');
+INSERT IGNORE INTO ng_words VALUES ('オネエ');
+INSERT IGNORE INTO ng_words VALUES ('痴漢');
+INSERT IGNORE INTO ng_words VALUES ('男の娘');
+INSERT IGNORE INTO ng_words VALUES ('車');
+INSERT IGNORE INTO ng_words VALUES ('バイ');
+INSERT IGNORE INTO ng_words VALUES ('おなべ');
+INSERT IGNORE INTO ng_words VALUES ('ハメ');
+INSERT IGNORE INTO ng_words VALUES ('はめ');
+INSERT IGNORE INTO ng_words VALUES ('初体験');
+INSERT IGNORE INTO ng_words VALUES ('処女');
+INSERT IGNORE INTO ng_words VALUES ('童貞');
