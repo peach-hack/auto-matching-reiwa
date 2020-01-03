@@ -11,11 +11,11 @@ from ..items.post import PostItem
 IKUKURU_DOMAIN = 'sp.194964.com'
 IKUKURU_DOMAIN2 = 'www.194964.com'
 IKUKURU_BASE_URL = 'https://sp.194964.com'
-IKUKURU_ENTRY_URL = ""
+IKUKURU_ENTRY_URL = "https://sp.194964.com"
 IKUKURU_LOGIN_URL = "https://www.194964.com/registration/login/show_login_tel.html"
 
-IKUKURU_SETTING_TOKYO_URL = IKUKURU_ENTRY_URL + "/setting/set_city?mode=area&city=237&pref=14"  # noqa 東京都渋谷区
-IKUKURU_SETTING_KANAGAWA_URL = IKUKURU_ENTRY_URL + "/setting/set_city?mode=area&city=892&pref=13"  # noqa 神奈川県川崎市中原区
+IKUKURU_SETTING_TOKYO_URL = IKUKURU_ENTRY_URL + "/bbs/exec_bbs_area_move.html?q=a2YxRkxVbk15bUc5OVJQQnFTbE4yS2N4NVNVUmdOZUtVZkNFbm8yMmtqcz0%3D"  # noqa 東京都
+IKUKURU_SETTING_KANAGAWA_URL = IKUKURU_ENTRY_URL + "/bbs/exec_bbs_area_move.html?q=by9qUHBrQTl5eVJ6bnMvcnBzelZEWDlOZGc2V2pyMkRyT3YzSzJraWtTaz0%3D"  # noqa 神奈川県
 
 
 def get_wakuwaku_board_url(genre):
@@ -52,22 +52,22 @@ class IkukuruSpider(scrapy.Spider):
                                                 callback=self.after_login)
 
     def after_login(self, response):
-        pass
-        # if self.area == "東京都":
-        #     yield Request(IKUKURU_SETTING_TOKYO_URL, self.set_area)
-        # else:
-        #     yield Request(IKUKURU_SETTING_KANAGAWA_URL, self.set_area)
+        if self.area == "東京都":
+            yield Request(IKUKURU_SETTING_TOKYO_URL, self.set_area)
+        else:
+            yield Request(IKUKURU_SETTING_KANAGAWA_URL, self.set_area)
 
     def set_area(self, response):
-        board_url_list = [
-            IKUKURU_BOARD_SUGUAITAI_URL, IKUKURU_BOARD_KYOJANAIKEDO_URL,
-            IKUKURU_BOARD_ADULT_URL, IKUKURU_BOARD_OTONANOKOIBITOKOUHO_URL,
-            IKUKURU_BOARD_ABNORMAL_URL, IKUKURU_BOARD_MIDDLEAGE_URL,
-            IKUKURU_BOARD_KIKONSHA_URL
-        ]
+        open_in_browser(response)
+        # board_url_list = [
+        #     IKUKURU_BOARD_SUGUAITAI_URL, IKUKURU_BOARD_KYOJANAIKEDO_URL,
+        #     IKUKURU_BOARD_ADULT_URL, IKUKURU_BOARD_OTONANOKOIBITOKOUHO_URL,
+        #     IKUKURU_BOARD_ABNORMAL_URL, IKUKURU_BOARD_MIDDLEAGE_URL,
+        #     IKUKURU_BOARD_KIKONSHA_URL
+        # ]
 
-        for board_url in board_url_list:
-            yield Request(url=board_url + "&p=1", callback=self.parse_board)
+        # for board_url in board_url_list:
+        #     yield Request(url=board_url + "&p=1", callback=self.parse_board)
 
     def parse_board(self, response):
         # open_in_browser(response)
