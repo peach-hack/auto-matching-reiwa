@@ -133,7 +133,8 @@ class PcmaxSpider(scrapy.Spider):
 
             post["genre"] = item.css('span.value1::text')[4].extract()
 
-            post["city"] = item.css('span.value1::text')[2].extract()
+            post["city"] = item.css('span.value1::text')[2].extract().strip(
+                self.area)
             post["age"] = item.css('span.value1::text')[1].extract().strip(
                 '\xa0')
 
