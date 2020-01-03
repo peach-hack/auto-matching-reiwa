@@ -1,11 +1,9 @@
 import scrapy
 
 import time
+import datetime
 
 from selenium.webdriver import Chrome, ChromeOptions
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 
@@ -125,18 +123,24 @@ class PcmaxSpider(scrapy.Spider):
                 '.search_btn>a::attr(id)').extract_first()
             post["url"] = "https://pcmax.jp/mobile/bbs_detail.php?bbs_id=" + id
 
+            post["image_url"] = ""  # 小さすぎるのでとりあえずいらない
+
             post["name"] = item.css(
-                'span.value1>span>font::text').extract_first()
+                'span.value1>span>font::text').extract_first().strip()
             post["prefecture"] = self.area
 
-            post["genre"] = item.css('span.value1::text')[4].extract()
+            post["genre"] = item.css('span.value1::text')[4].extract().strip()
 
-            post["city"] = item.css('span.value1::text')[2].extract()
+            post["city"] = item.css('span.value1::text')[2].extract().replace(
+                self.area, "").strip()
             post["age"] = item.css('span.value1::text')[1].extract().strip(
-                '\xa0')
+                '\xa0').strip()
 
-            post['title'] = item.css('.title_link::text').extract_first()
-            post['post_at'] = item.css('span.value1::text')[3].extract()
+            post['title'] = item.css(
+                '.title_link::text').extract_first().strip()
+            posted_at_str = item.css('span.value1::text')[3].extract()
+            post['posted_at'] = datetime.datetime.strptime(
+                posted_at_str, '%Y年%m月%d日 %H:%M')
 
             post['site'] = "PCMAX"
 

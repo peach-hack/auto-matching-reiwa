@@ -79,6 +79,8 @@ class IkukuruSpider(scrapy.Spider):
         if len(post_list) == 0:
             return
 
+        now = datetime.datetime.now()
+
         for item in post_list:
             post = PostItem()
 
@@ -100,39 +102,41 @@ class IkukuruSpider(scrapy.Spider):
 
             post["prefecture"] = self.area
             post["genre"] = response.css(
-                'article>div.bgTopBlue>p::text').extract_first().split('\n')[0]
+                'article>div.bgTopBlue>p::text').extract_first().split(
+                    '\n')[0].strip()
             post["city"] = item.css(
-                '.refinedBbsDesign>span::text').extract()[-1]
+                '.refinedBbsDesign>span::text').extract()[-1].strip()
 
             image_url = item.css(
                 ".contentsImgContribute>img::attr(src)").extract_first()
             post['image_url'] = image_url
 
             post['title'] = item.css(
-                "p.textComment>a::text").extract_first().strip()
-            post['post_at'] = item.css(
-                "p.timeContribute::text").extract_first()
-            last_post_at = post['post_at']
+                "p.textComment>a::text").extract_first().strip().strip()
 
+            posted_at_str = item.css("p.timeContribute::text").extract_first()
+            try:
+                posted_at = datetime.datetime.strptime(posted_at_str,
+                                                       '%m/%d %H:%M')
+            except Exception:
+                posted_at = datetime.datetime.strptime(posted_at_str,
+                                                       '%Y/%m/%d %H:%M')
+            if now.month == 1 and posted_at.month == 12:
+                posted_at = posted_at.replace(year=now.year - 1)
+            else:
+                posted_at = posted_at.replace(year=now.year)
+
+            post['posted_at'] = posted_at
             post['site'] = "イククル"
             post['profile_id'] = ""
 
+            last_posted_at = posted_at
+
             yield post
 
-        now = datetime.datetime.now()
-        try:
-            post_at = datetime.datetime.strptime(last_post_at, '%m/%d %H:%M')
-        except Exception:
-            post_at = datetime.datetime.strptime(last_post_at,
-                                                 '%Y/%m/%d %H:%M')
-
-        if now.month == 1 and post_at.month == 12:
-            post_at = post_at.replace(year=now.year - 1)
-        else:
-            post_at = post_at.replace(year=now.year)
         days_ago = now - datetime.timedelta(days=self.days)
 
-        if post_at > days_ago:
+        if last_posted_at > days_ago:
             partial_url = response.css(
                 '.nextBtn>a::attr(href)').extract_first()
             next_url = "https://sp.194964.com/bbs/show_bbs.html" + partial_url  # noqa

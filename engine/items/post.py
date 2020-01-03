@@ -10,7 +10,7 @@ class PostItem(scrapy.Item):
     title = scrapy.Field()
     url = scrapy.Field()
     image_url = scrapy.Field()
-    post_at = scrapy.Field()
+    posted_at = scrapy.Field()
     genre = scrapy.Field()
     prefecture = scrapy.Field()
     city = scrapy.Field()
