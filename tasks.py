@@ -123,3 +123,11 @@ def crawl_ikukuru_tokyo(c, days):
 def crawl_ikukuru_kanagawa(c, days):
     name = "ikukuru"
     crawl_base_kanagawa(days, name)
+
+
+@task
+def crawl_from_cron(c):
+    crawl_happymail(c)
+    crawl_wakuwaku(c, 1)
+    crawl_pcmax(c)
+    crawl_ikukuru(c, 1)
