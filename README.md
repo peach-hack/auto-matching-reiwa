@@ -3,6 +3,9 @@
 ![](https://img.shields.io/github/issues/peach-hack/auto-matching-reiwa.svg)
 [![Open Source Love](https://badges.frapsoft.com/os/v3/open-source.svg?v=103)](https://github.com/peach-hack/auto-matching-reiwa/)
 
+* Pyhton 3.7.4
+* Scrapy 1.6.0
+
 ## 概要
 
 令和版統合出会い系エンジン(IDE: Integreted Deai Engine).
@@ -18,6 +21,21 @@
 - [PCMAX](https://pcmax.jp/lp/?ad_id=rm181904)
 - [イクヨクルヨ](https://194964.com/AF1213451)
 - [Tinder](https://tinder.com/)
+
+## 新規環境構築
+
+最低限入れておくものを列挙しておく。
+
+* scrapy
+* selenium(pip)
+* python-dotenv(pip)
+* invoke
+* numpy
+* pandas
+* seaborn
+* matplotlib
+* flake8
+* yapf
 
 ## Policy
 
