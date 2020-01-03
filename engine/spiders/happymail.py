@@ -130,6 +130,9 @@ class HappymailSpider(scrapy.Spider):
             post['title'] = item.css('.ds_post_title::text').extract_first()
             post['post_at'] = item.css('.ds_post_date::text').extract_first()
 
+            post['site'] = "ハッピーメール"
+            post['profile_id'] = ""
+
             yield post
 
     def closed(self, reason):

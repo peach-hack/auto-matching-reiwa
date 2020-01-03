@@ -3,6 +3,7 @@ import scrapy
 
 class PostItem(scrapy.Item):
     id = scrapy.Field()
+    site = scrapy.Field()
     profile_id = scrapy.Field()
     name = scrapy.Field()
     age = scrapy.Field()

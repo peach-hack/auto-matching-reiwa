@@ -114,6 +114,9 @@ class IkukuruSpider(scrapy.Spider):
                 "p.timeContribute::text").extract_first()
             last_post_at = post['post_at']
 
+            post['site'] = "イククル"
+            post['profile_id'] = ""
+
             yield post
 
         now = datetime.datetime.now()
