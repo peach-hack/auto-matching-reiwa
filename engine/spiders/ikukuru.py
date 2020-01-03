@@ -112,7 +112,7 @@ class IkukuruSpider(scrapy.Spider):
                 "p.textComment>a::text").extract_first().strip()
             post['post_at'] = item.css(
                 "p.timeContribute::text").extract_first()
-            # last_post_at = post['post_at']
+            last_post_at = post['post_at']
 
             yield post
 
