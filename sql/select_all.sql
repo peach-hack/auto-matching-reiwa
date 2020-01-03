@@ -5,4 +5,5 @@ SELECT
 FROM
     posts
 ORDER BY posted_at DESC
+LIMIT 1000
 ;
