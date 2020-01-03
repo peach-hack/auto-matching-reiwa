@@ -75,6 +75,8 @@ class WakuwakuSpider(scrapy.Spider):
         if len(post_list) == 0:
             return
 
+        now = datetime.datetime.now()
+
         for p in post_list:
             post = PostItem()
 
@@ -85,12 +87,13 @@ class WakuwakuSpider(scrapy.Spider):
             post['id'] = partial_url.split('id=')[1]
             post["url"] = WAKUWAKU_BASE_URL + partial_url
 
-            post["name"] = item.css('p.profile__name::text').extract_first()
+            post["name"] = item.css(
+                'p.profile__name::text').extract_first().strip()
             post["prefecture"] = self.area
             post["genre"] = item.css(
-                'p.icon_bbs_category::text').extract_first()
+                'p.icon_bbs_category::text').extract_first().strip()
             post["city"] = item.css(
-                'span.profile__address::text').extract_first()
+                'span.profile__address::text').extract_first().strip()
 
             image_url = item.css('div.profile__image').css(
                 'img::attr(src)').extract_first()
@@ -100,30 +103,33 @@ class WakuwakuSpider(scrapy.Spider):
             else:
                 post['image_url'] = image_url
 
-            post['age'] = item.css('span.profile__age::text').extract_first()
-            post['title'] = item.css('p.profile__text::text').extract_first()
-            post['post_at'] = item.css('p.profile__date::text').extract_first()
+            post['age'] = item.css(
+                'span.profile__age::text').extract_first().strip()
+            post['title'] = item.css(
+                'p.profile__text::text').extract_first().strip()
+            posted_at_str = item.css('p.profile__date::text').extract_first()
+
+            try:
+                posted_at = datetime.datetime.strptime(posted_at_str,
+                                                       '%m/%d %H:%M')
+            except Exception:
+                posted_at = datetime.datetime.strptime(posted_at_str,
+                                                       '%Y/%m/%d %H:%M')
+            if now.month == 1 and posted_at.month == 12:
+                posted_at = posted_at.replace(year=now.year - 1)
+            else:
+                posted_at = posted_at.replace(year=now.year)
+
+            post['posted_at'] = posted_at
 
             post['site'] = "ワクワクメール"
             post['profile_id'] = ""
 
-            last_post_at = post['post_at']
+            last_posted_at = posted_at
             yield post
 
-        now = datetime.datetime.now()
-        try:
-            post_at = datetime.datetime.strptime(last_post_at, '%m/%d %H:%M')
-        except Exception:
-            post_at = datetime.datetime.strptime(last_post_at,
-                                                 '%Y/%m/%d %H:%M')
-
-        if now.month == 1 and post_at.month == 12:
-            post_at = post_at.replace(year=now.year - 1)
-        else:
-            post_at = post_at.replace(year=now.year)
-
         days_ago = now - datetime.timedelta(days=self.days)
-        if post_at > days_ago:
+        if last_posted_at > days_ago:
             url_info = response.url.split("&p=")
             page_no = int(url_info[1])
             next_url = url_info[0] + "&p=" + str(page_no + 1)

@@ -16,7 +16,7 @@ class Post(Base):
     title = Column(String(50))
     url = Column(String(200))
     image_url = Column(String(500))
-    post_at = Column(String(20))
+    posted_at = Column(DateTime)
     genre = Column(String(20))
     prefecture = Column(String(10))
     city = Column(String(16))

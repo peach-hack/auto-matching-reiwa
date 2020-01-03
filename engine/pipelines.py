@@ -23,7 +23,7 @@ class MysqlPipeline(object):
                     title=item['title'],
                     url=item['url'],
                     image_url=item['image_url'],
-                    post_at=item['post_at'],
+                    posted_at=item['posted_at'],
                     genre=item['genre'],
                     prefecture=item['prefecture'],
                     city=item['city'])

@@ -1,7 +1,7 @@
 import scrapy
 
 import time
-# import datetime
+import datetime
 
 from selenium.webdriver import Chrome, ChromeOptions
 from selenium.webdriver.support.ui import WebDriverWait
@@ -95,6 +95,8 @@ class HappymailSpider(scrapy.Spider):
 
         post_list = response.css("li.ds_user_post_link_item_bill")
 
+        now = datetime.datetime.now()
+
         for item in post_list:
             post = PostItem()
 
@@ -105,16 +107,17 @@ class HappymailSpider(scrapy.Spider):
 
             post["name"] = item.css(
                 '.ds_post_body_name_bill::text').extract_first().strip(
-                    '♀\xa0')  # noqa
+                    '♀\xa0').strip()  # noqa
             post["prefecture"] = self.area
 
-            post["genre"] = item.css('p.round-btn::text').extract_first()
+            post["genre"] = item.css(
+                'p.round-btn::text').extract_first().strip()
 
             age_info = item.css(
                 '.ds_post_body_age::text').extract_first().split(
                     '\xa0')  # noqa
-            post["city"] = age_info[1]
-            post["age"] = age_info[0]
+            post["city"] = age_info[1].strip()
+            post["age"] = age_info[0].strip()
 
             image_url = item.css(
                 '.ds_thum_contain_s::attr(style)').extract_first().strip(
@@ -127,8 +130,18 @@ class HappymailSpider(scrapy.Spider):
             else:
                 post['image_url'] = image_url
 
-            post['title'] = item.css('.ds_post_title::text').extract_first()
-            post['post_at'] = item.css('.ds_post_date::text').extract_first()
+            post['title'] = item.css(
+                '.ds_post_title::text').extract_first().strip()
+            posted_at_str = item.css('.ds_post_date::text').extract_first()
+
+            posted_at = datetime.datetime.strptime(posted_at_str,
+                                                   '%m/%d %H:%M')  # noqa
+            if now.month == 1 and posted_at.month == 12:
+                posted_at = posted_at.replace(year=now.year - 1)
+            else:
+                posted_at = posted_at.replace(year=now.year)
+
+            post['posted_at'] = posted_at
 
             post['site'] = "ハッピーメール"
             post['profile_id'] = ""
