@@ -19,7 +19,7 @@
 - [ハッピーメール](https://happymail.co.jp/?af14212217)
 - [ワクワクメール](https://550909.com/?f6858637)
 - [PCMAX](https://pcmax.jp/lp/?ad_id=rm181904)
-- [イクヨクルヨ](https://194964.com/AF1213451)
+- [イククル](https://194964.com/AF1213451)
 - [Tinder](https://tinder.com/)
 
 ## 新規環境構築
@@ -36,6 +36,11 @@
 * matplotlib
 * flake8
 * yapf
+
+## 出会い系大手４サイトの統計データ分析
+
+ハッピーメール, ワクワクメール, PCMAX, イククルの4サイトのデータ分析。
+* https://github.com/peach-hack/auto-matching-reiwa/blob/master/notebooks/data-analysis.ipynb
 
 ## Policy
 
