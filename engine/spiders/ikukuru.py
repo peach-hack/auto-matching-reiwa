@@ -2,6 +2,7 @@ import scrapy
 from scrapy.utils.response import open_in_browser
 from scrapy.http import Request
 
+import time
 import datetime
 
 import engine.env as env
@@ -18,17 +19,21 @@ IKUKURU_SETTING_TOKYO_URL = IKUKURU_ENTRY_URL + "/bbs/exec_bbs_area_move.html?q=
 IKUKURU_SETTING_KANAGAWA_URL = IKUKURU_ENTRY_URL + "/bbs/exec_bbs_area_move.html?q=by9qUHBrQTl5eVJ6bnMvcnBzelZEWDlOZGc2V2pyMkRyT3YzSzJraWtTaz0%3D"  # noqa 神奈川県
 
 
-def get_wakuwaku_board_url(genre):
-    return IKUKURU_ENTRY_URL + "/bbs/list?genre=" + str(genre)
+def get_ikukuru_board_url(query_key):
+    return IKUKURU_ENTRY_URL + "/bbs/show_bbs.html?q=" + query_key
 
 
-IKUKURU_BOARD_SUGUAITAI_URL = get_wakuwaku_board_url(3)
-IKUKURU_BOARD_KYOJANAIKEDO_URL = get_wakuwaku_board_url(20)
-IKUKURU_BOARD_ADULT_URL = get_wakuwaku_board_url(4)
-IKUKURU_BOARD_OTONANOKOIBITOKOUHO_URL = get_wakuwaku_board_url(6)
-IKUKURU_BOARD_ABNORMAL_URL = get_wakuwaku_board_url(8)
-IKUKURU_BOARD_MIDDLEAGE_URL = get_wakuwaku_board_url(15)
-IKUKURU_BOARD_KIKONSHA_URL = get_wakuwaku_board_url(21)
+IKUKURU_BOARD_SUGUAITAI_URL = get_ikukuru_board_url(
+    "ZTJvTzJzRGhPQW5yRmsrdm5KeXhFdz09")
+IKUKURU_BOARD_HIMITSU_URL = get_ikukuru_board_url(
+    "TTVzV090eEJFdG42aEc3ZnYzeitXZz09")
+# IKUKURU_BOARD_MAZUHASHOKUJIKARA_URL = "" バグなのかPC画面に飛ばされるので保留
+IKUKURU_BOARD_KIKONSHABOSHU_URL = get_ikukuru_board_url(
+    "cUg5aU93eGlVUmJCdEM3VVdGdkxpdz09")
+IKUKURU_BOARD_MIDDLEAGE_URL = get_ikukuru_board_url(
+    "R2psRFFSd3VPSE5oZFlBdTkrUXhPc0ZWeVhvdWpDd0JsaG9NTHNSSXpOWT0%3D")
+IKUKURU_BOARD_ABNORMAL_URL = get_ikukuru_board_url(
+    "NHB2TUxzTDZOTUVSaTZOUjFnWkJYZnNadkoxU2hQNVNQblRnT1ZJUlV4ND0%3D")
 
 
 class IkukuruSpider(scrapy.Spider):
@@ -58,68 +63,72 @@ class IkukuruSpider(scrapy.Spider):
             yield Request(IKUKURU_SETTING_KANAGAWA_URL, self.set_area)
 
     def set_area(self, response):
-        open_in_browser(response)
+        board_url_list = [IKUKURU_BOARD_SUGUAITAI_URL]
         # board_url_list = [
-        #     IKUKURU_BOARD_SUGUAITAI_URL, IKUKURU_BOARD_KYOJANAIKEDO_URL,
-        #     IKUKURU_BOARD_ADULT_URL, IKUKURU_BOARD_OTONANOKOIBITOKOUHO_URL,
-        #     IKUKURU_BOARD_ABNORMAL_URL, IKUKURU_BOARD_MIDDLEAGE_URL,
-        #     IKUKURU_BOARD_KIKONSHA_URL
+        #     IKUKURU_BOARD_SUGUAITAI_URL, IKUKURU_BOARD_HIMITSU_URL,
+        #     IKUKURU_BOARD_ABNORMAL_URL, IKUKURU_BOARD_KIKONSHABOSHU_URL,
+        #     IKUKURU_BOARD_MIDDLEAGE_URL
         # ]
 
-        # for board_url in board_url_list:
-        #     yield Request(url=board_url + "&p=1", callback=self.parse_board)
+        for board_url in board_url_list:
+            yield Request(url=board_url, callback=self.parse_board)
 
     def parse_board(self, response):
-        # open_in_browser(response)
-        # post_list = []
+        time.sleep(1)
+        post_list = response.css(".refinedBbsDesign.bgMiddle")
 
-        post_list = response.css("ul.profile_list")
-
-        for p in post_list:
+        for item in post_list:
             post = PostItem()
-
-            item = p.css("div.profile__item")
 
             partial_url = item.css('a::attr(href)').extract_first()
 
-            post['id'] = partial_url.split('id=')[1]
+            post['id'] = partial_url.split('?q=')[1]
             post["url"] = IKUKURU_BASE_URL + partial_url
 
-            post["name"] = item.css('p.profile__name::text').extract_first()
-            post["prefecture"] = self.area
-            post["genre"] = item.css(
-                'p.icon_bbs_category::text').extract_first()
-            post["city"] = item.css(
-                'span.profile__address::text').extract_first()
+            try:
+                name_age = item.css(
+                    '.contentsTextContribute>div::text').extract()[1]
+                post["name"] = name_age.split()[0]
+                post['age'] = name_age.split()[1]
+            except Exception:
+                name_age = item.css(
+                    '.contentsTextContribute>div::text').extract()
+                post["name"] = name_age[0].strip()
+                post['age'] = name_age[1].strip()
 
-            image_url = item.css('div.profile__image').css(
-                'img::attr(src)').extract_first()
-            if 'thumbnail_no_image.png' in image_url:
-                post[
-                    'image_url'] = IKUKURU_BASE_URL + "/img/wmsp/common/thumbnail_no_image.png"  # noqa
-            else:
-                post['image_url'] = image_url
-            post['age'] = item.css('span.profile__age::text').extract_first()
-            post['title'] = item.css('p.profile__text::text').extract_first()
-            post['post_at'] = item.css('p.profile__date::text').extract_first()
+            post["prefecture"] = self.area
+            post["genre"] = response.css(
+                'article>div.bgTopBlue>p::text').extract_first().split('\n')[0]
+            post["city"] = item.css(
+                '.refinedBbsDesign>span::text').extract()[-1]
+
+            image_url = item.css(
+                ".contentsImgContribute>img::attr(src)").extract_first()
+            post['image_url'] = image_url
+
+            post['title'] = item.css(
+                "p.textComment>a::text").extract_first().strip()
+            post['post_at'] = item.css(
+                "p.timeContribute::text").extract_first()
+            last_post_at = post['post_at']
 
             yield post
 
-            now = datetime.datetime.now()
-            try:
-                post_at = datetime.datetime.strptime(post['post_at'],
-                                                     '%m/%d %H:%M')
-            except Exception:
-                post_at = datetime.datetime.strptime(post['post_at'],
-                                                     '%Y/%m/%d %H:%M')
+        now = datetime.datetime.now()
+        try:
+            post_at = datetime.datetime.strptime(last_post_at, '%m/%d %H:%M')
+        except Exception:
+            post_at = datetime.datetime.strptime(last_post_at,
+                                                 '%Y/%m/%d %H:%M')
 
-            if now.month == 1 and post_at.month == 12:
-                post_at = post_at.replace(year=now.year - 1)
-            else:
-                post_at = post_at.replace(year=now.year)
+        if now.month == 1 and post_at.month == 12:
+            post_at = post_at.replace(year=now.year - 1)
+        else:
+            post_at = post_at.replace(year=now.year)
+        days_ago = now - datetime.timedelta(days=self.days)
 
-            days_ago = now - datetime.timedelta(days=self.days)
-            if post_at > days_ago:
-                page_no = int(response.url.split("&p=")[1])
-                next_url = get_wakuwaku_board_url(3) + "&p=" + str(page_no + 1)
-                yield Request(url=next_url, callback=self.parse_board)
+        if post_at > days_ago:
+            partial_url = response.css(
+                '.nextBtn>a::attr(href)').extract_first()
+            next_url = "https://sp.194964.com/bbs/show_bbs.html" + partial_url  # noqa
+            yield Request(url=next_url, callback=self.parse_board)

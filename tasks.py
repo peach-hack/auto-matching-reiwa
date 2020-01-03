@@ -108,18 +108,18 @@ def crawl_pcmax_kanagawa(c):
 
 
 @task
-def crawl_ikukuru(c):
+def crawl_ikukuru(c, days):
     name = "ikukuru"
-    crawl_base(1, name)
+    crawl_base(days, name)
 
 
 @task
-def crawl_ikukuru_tokyo(c):
+def crawl_ikukuru_tokyo(c, days):
     name = "ikukuru"
-    crawl_base_tokyo(1, name)
+    crawl_base_tokyo(days, name)
 
 
 @task
-def crawl_ikukuru_kanagawa(c):
+def crawl_ikukuru_kanagawa(c, days):
     name = "ikukuru"
-    crawl_base_kanagawa(1, name)
+    crawl_base_kanagawa(days, name)
