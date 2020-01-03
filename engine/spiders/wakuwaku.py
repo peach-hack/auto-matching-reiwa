@@ -58,20 +58,22 @@ class WakuwakuSpider(scrapy.Spider):
 
     def set_area(self, response):
         board_url_list = [
-            WAKUWAKU_BOARD_SUGUAITAI_URL, WAKUWAKU_BOARD_KYOJANAIKEDO_URL,
-            WAKUWAKU_BOARD_ADULT_URL, WAKUWAKU_BOARD_OTONANOKOIBITOKOUHO_URL,
-            WAKUWAKU_BOARD_ABNORMAL_URL, WAKUWAKU_BOARD_MIDDLEAGE_URL,
-            WAKUWAKU_BOARD_KIKONSHA_URL
+            WAKUWAKU_BOARD_SUGUAITAI_URL,
+            WAKUWAKU_BOARD_KYOJANAIKEDO_URL,
+            WAKUWAKU_BOARD_ADULT_URL,
+            WAKUWAKU_BOARD_OTONANOKOIBITOKOUHO_URL,
+            WAKUWAKU_BOARD_ABNORMAL_URL,
+            WAKUWAKU_BOARD_MIDDLEAGE_URL,
         ]
 
         for board_url in board_url_list:
             yield Request(url=board_url + "&p=1", callback=self.parse_board)
 
     def parse_board(self, response):
-        # open_in_browser(response)
-        # post_list = []
-
         post_list = response.css("ul.profile_list")
+
+        if len(post_list) == 0:
+            return
 
         for p in post_list:
             post = PostItem()
@@ -97,27 +99,29 @@ class WakuwakuSpider(scrapy.Spider):
                     'image_url'] = WAKUWAKU_BASE_URL + "/img/wmsp/common/thumbnail_no_image.png"  # noqa
             else:
                 post['image_url'] = image_url
+
             post['age'] = item.css('span.profile__age::text').extract_first()
             post['title'] = item.css('p.profile__text::text').extract_first()
             post['post_at'] = item.css('p.profile__date::text').extract_first()
 
+            last_post_at = post['post_at']
             yield post
 
-            now = datetime.datetime.now()
-            try:
-                post_at = datetime.datetime.strptime(post['post_at'],
-                                                     '%m/%d %H:%M')
-            except Exception:
-                post_at = datetime.datetime.strptime(post['post_at'],
-                                                     '%Y/%m/%d %H:%M')
+        now = datetime.datetime.now()
+        try:
+            post_at = datetime.datetime.strptime(last_post_at, '%m/%d %H:%M')
+        except Exception:
+            post_at = datetime.datetime.strptime(last_post_at,
+                                                 '%Y/%m/%d %H:%M')
 
-            if now.month == 1 and post_at.month == 12:
-                post_at = post_at.replace(year=now.year - 1)
-            else:
-                post_at = post_at.replace(year=now.year)
+        if now.month == 1 and post_at.month == 12:
+            post_at = post_at.replace(year=now.year - 1)
+        else:
+            post_at = post_at.replace(year=now.year)
 
-            days_ago = now - datetime.timedelta(days=self.days)
-            if post_at > days_ago:
-                page_no = int(response.url.split("&p=")[1])
-                next_url = get_wakuwaku_board_url(3) + "&p=" + str(page_no + 1)
-                yield Request(url=next_url, callback=self.parse_board)
+        days_ago = now - datetime.timedelta(days=self.days)
+        if post_at > days_ago:
+            url_info = response.url.split("&p=")
+            page_no = int(url_info[1])
+            next_url = url_info[0] + "&p=" + str(page_no + 1)
+            yield Request(url=next_url, callback=self.parse_board)
