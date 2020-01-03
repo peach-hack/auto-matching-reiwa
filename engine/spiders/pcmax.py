@@ -125,6 +125,8 @@ class PcmaxSpider(scrapy.Spider):
                 '.search_btn>a::attr(id)').extract_first()
             post["url"] = "https://pcmax.jp/mobile/bbs_detail.php?bbs_id=" + id
 
+            post["image_url"] = ""  # 小さすぎるのでとりあえずいらない
+
             post["name"] = item.css(
                 'span.value1>span>font::text').extract_first()
             post["prefecture"] = self.area
