@@ -63,12 +63,11 @@ class IkukuruSpider(scrapy.Spider):
             yield Request(IKUKURU_SETTING_KANAGAWA_URL, self.set_area)
 
     def set_area(self, response):
-        board_url_list = [IKUKURU_BOARD_SUGUAITAI_URL]
-        # board_url_list = [
-        #     IKUKURU_BOARD_SUGUAITAI_URL, IKUKURU_BOARD_HIMITSU_URL,
-        #     IKUKURU_BOARD_ABNORMAL_URL, IKUKURU_BOARD_KIKONSHABOSHU_URL,
-        #     IKUKURU_BOARD_MIDDLEAGE_URL
-        # ]
+        board_url_list = [
+            IKUKURU_BOARD_SUGUAITAI_URL, IKUKURU_BOARD_HIMITSU_URL,
+            IKUKURU_BOARD_ABNORMAL_URL, IKUKURU_BOARD_KIKONSHABOSHU_URL,
+            IKUKURU_BOARD_MIDDLEAGE_URL
+        ]
 
         for board_url in board_url_list:
             yield Request(url=board_url, callback=self.parse_board)
@@ -76,6 +75,9 @@ class IkukuruSpider(scrapy.Spider):
     def parse_board(self, response):
         time.sleep(1)
         post_list = response.css(".refinedBbsDesign.bgMiddle")
+
+        if len(post_list) == 0:
+            return
 
         for item in post_list:
             post = PostItem()
@@ -88,13 +90,13 @@ class IkukuruSpider(scrapy.Spider):
             try:
                 name_age = item.css(
                     '.contentsTextContribute>div::text').extract()[1]
-                post["name"] = name_age.split()[0]
-                post['age'] = name_age.split()[1]
+                post["name"] = name_age.split()[0].strip()
+                post['age'] = name_age.split()[1].strip()
             except Exception:
                 name_age = item.css(
                     '.contentsTextContribute>div::text').extract()
-                post["name"] = name_age[0].strip()
-                post['age'] = name_age[1].strip()
+                post["name"] = name_age[1].strip()
+                post['age'] = name_age[2].strip()
 
             post["prefecture"] = self.area
             post["genre"] = response.css(
@@ -110,25 +112,25 @@ class IkukuruSpider(scrapy.Spider):
                 "p.textComment>a::text").extract_first().strip()
             post['post_at'] = item.css(
                 "p.timeContribute::text").extract_first()
-            last_post_at = post['post_at']
+            # last_post_at = post['post_at']
 
             yield post
 
-        now = datetime.datetime.now()
-        try:
-            post_at = datetime.datetime.strptime(last_post_at, '%m/%d %H:%M')
-        except Exception:
-            post_at = datetime.datetime.strptime(last_post_at,
-                                                 '%Y/%m/%d %H:%M')
+        # now = datetime.datetime.now()
+        # try:
+        #     post_at = datetime.datetime.strptime(last_post_at, '%m/%d %H:%M')
+        # except Exception:
+        #     post_at = datetime.datetime.strptime(last_post_at,
+        #                                          '%Y/%m/%d %H:%M')
 
-        if now.month == 1 and post_at.month == 12:
-            post_at = post_at.replace(year=now.year - 1)
-        else:
-            post_at = post_at.replace(year=now.year)
-        days_ago = now - datetime.timedelta(days=self.days)
+        # if now.month == 1 and post_at.month == 12:
+        #     post_at = post_at.replace(year=now.year - 1)
+        # else:
+        #     post_at = post_at.replace(year=now.year)
+        # days_ago = now - datetime.timedelta(days=self.days)
 
-        if post_at > days_ago:
-            partial_url = response.css(
-                '.nextBtn>a::attr(href)').extract_first()
-            next_url = "https://sp.194964.com/bbs/show_bbs.html" + partial_url  # noqa
-            yield Request(url=next_url, callback=self.parse_board)
+        # if post_at > days_ago:
+        #     partial_url = response.css(
+        #         '.nextBtn>a::attr(href)').extract_first()
+        #     next_url = "https://sp.194964.com/bbs/show_bbs.html" + partial_url  # noqa
+        #     yield Request(url=next_url, callback=self.parse_board)
