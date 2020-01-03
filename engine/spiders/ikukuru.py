@@ -52,7 +52,7 @@ class IkukuruSpider(scrapy.Spider):
                                                 callback=self.after_login)
 
     def after_login(self, response):
-        open_in_browser(response)
+        pass
         # if self.area == "東京都":
         #     yield Request(IKUKURU_SETTING_TOKYO_URL, self.set_area)
         # else:

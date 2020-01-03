@@ -71,6 +71,7 @@ def crawl_wakuwaku_kanagawa(c, days):
     crawl_base_kanagawa(days, name)
 
 
+@task
 def crawl_happymail(c):
     name = "happymail"
     crawl_base(1, name)
