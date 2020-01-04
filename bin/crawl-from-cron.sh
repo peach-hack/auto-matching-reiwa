@@ -2,16 +2,47 @@
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate auto-matching
 
-cd /home/tsu-nera/repo/auto-matching-reiwa
+HOMEDIR=${HOME}/repo/auto-matching-reiwa
+LOGDIR="${HOMEDIR}/log"
 
-# with scroll
-scrapy crawl -a area="東京都" -a days=1 happymail --nolog
-scrapy crawl -a area="神奈川県" -a days=1 happymail --nolog
-scrapy crawl -a area="東京都" -a days=1 pcmax --nolog
-scrapy crawl -a area="神奈川県" -a days=1 pcmax --nolog
+LOGFILE_WAKUWAKU_TOKYO=wakuwaku_tokyo.log
+LOGFILE_WAKUWAKU_KANAGAWA=wakuwaku_kanagawa.log
+LOGFILE_IKUKURU_TOKYO=ikukuru_tokyo.log
+LOGFILE_IKUKURU_KANAGAWA=ikukuru_kanagawa.log
+LOGFILE_HAPPYMAIL_TOKYO=happymail_tokyo.log
+LOGFILE_HAPPYMAIL_KANAGAWA=happymail_kanagawa.log
+LOGFILE_PCMAX_TOKYO=pcmax_tokyo.log
+LOGFILE_PCMAX_KANAGAWA=pcmax_kanagawa.log
 
-# with pagenate
-scrapy crawl -a area="東京都" -a days=1 wakuwaku --nolog
-scrapy crawl -a area="神奈川県" -a days=1 wakuwaku --nolog
-scrapy crawl -a area="東京都" -a days=1 ikukuru --nolog
-scrapy crawl -a area="神奈川県" -a days=1 ikukuru --nolog
+LOGPATH_WAKUWAKU_TOKYO="${LOGDIR}/${LOGFILE_WAKUWAKU_TOKYO}"
+LOGPATH_WAKUWAKU_KANAGAWA="${LOGDIR}/${LOGFILE_WAKUWAKU_KANAGAWA}"
+LOGPATH_IKUKURU_TOKYO="${LOGDIR}/${LOGFILE_IKUKURU_TOKYO}"
+LOGPATH_IKUKURU_KANAGAWA="${LOGDIR}/${LOGFILE_IKUKURU_TOKYO}"
+LOGPATH_HAPPYMAIL_TOKYO="${LOGDIR}/${LOGFILE_HAPPYMAIL_TOKYO}"
+LOGPATH_HAPPYMAIL_KANAGAWA="${LOGDIR}/${LOGFILE_HAPPYMAIL_KANAGAWA}"
+LOGPATH_PCMAX_TOKYO="${LOGDIR}/${LOGFILE_PCMAX_TOKYO}"
+LOGPATH_PCMAX_KANAGAWA="${LOGDIR}/${LOGFILE_PCMAX_TOKYO}"
+
+
+cd ${HOMEDIR}
+
+rm -f ${LOGPATH_WAKUWAKU_TOKYO}
+rm -f ${LOGPATH_WAKUWAKU_KANAGAWA}
+rm -f ${LOGPATH_IKUKURU_TOKYO}
+rm -f ${LOGPATH_IKUKURU_KANAGAWA}
+rm -f ${LOGPATH_HAPPYMAIL_TOKYO}
+rm -f ${LOGPATH_HAPPYMAIL_KANAGAWA}
+rm -f ${LOGPATH_PCMAX_TOKYO}
+rm -f ${LOGPATH_PCMAX_KANAGAWA}
+
+AREA_TOKYO="東京都"
+AREA_KANAGAWA="神奈川県"
+
+scrapy crawl -a area=${AREA_TOKYO} -a days=1 wakuwaku --logfile=${LOGPATH_WAKUWAKU_TOKYO} --loglevel=INFO
+scrapy crawl -a area=${AREA_KANAGAWA} -a days=1 wakuwaku --logfile=${LOGPATH_WAKUWAKU_KANAGAWA} --loglevel=INFO
+scrapy crawl -a area=${AREA_TOKYO} -a days=1 ikukuru --logfile=${LOGPATH_IKUKURU_TOKYO} --loglevel=INFO
+scrapy crawl -a area=${AREA_KANAGAWA} -a days=1 ikukuru --logfile=${LOGPATH_IKUKURU_KANAGAWA} --loglevel=INFO
+scrapy crawl -a area=${AREA_TOKYO} -a days=1 happymail --logfile=${LOGPATH_HAPPYMAIL_TOKYO} --loglevel=INFO
+scrapy crawl -a area=${AREA_KANAGAWA} -a days=1 happymail --logfile=${LOGPATH_HAPPYMAIL_KANAGAWA} --loglevel=INFO
+scrapy crawl -a area=${AREA_TOKYO} -a days=1 pcmax --logfile=${LOGPATH_PCMAX_TOKYO} --loglevel=INFO
+scrapy crawl -a area=${AREA_KANAGAWA} -a days=1 pcmax --logfile=${LOGPATH_PCMAX_KANAGAWA} --loglevel=INFO
