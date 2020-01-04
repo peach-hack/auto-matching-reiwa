@@ -43,6 +43,8 @@ WHERE
   AND genre != '既婚者'
   AND genre != '既婚者希望'
   AND genre != '画像掲示板'
+  AND genre != '全国アダルト'
+  AND genre != 'ミドルエイジアダルト'
   AND genre != 'ミドルエイジ'
   AND genre != 'ﾐﾄﾞﾙｴｲｼﾞ/ｼﾆｱ' --
   --
