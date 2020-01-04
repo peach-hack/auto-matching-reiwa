@@ -1,5 +1,2 @@
-USE auto_matching;
-
-CREATE TABLE ng_words (
-  word VARCHAR(10)
-)
+-- USE auto_matching;
+CREATE TABLE ng_words (word VARCHAR(10));
