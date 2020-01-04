@@ -1,3 +1,6 @@
+--
+-- サクラ判定
+--
 WITH title_freqs AS (
   SELECT
     title as title_f,
