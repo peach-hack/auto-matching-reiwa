@@ -1,4 +1,19 @@
--- USE auto_matching;
+WITH title_freqs AS (
+  SELECT
+    title as title_f,
+    COUNT(title) as title_count
+  FROM posts
+  GROUP BY
+    title_f
+),
+profile_freqs AS (
+  SELECT
+    CONCAT(name, '_', age, '_', city) as profile_label_f,
+    COUNT(CONCAT(name, '_', age, '_', city)) as profile_count
+  FROM posts
+  GROUP BY
+    profile_label_f
+)
 SELECT
   posted_at,
   title,
@@ -8,13 +23,17 @@ SELECT
   genre,
   prefecture,
   city,
+  title_count,
+  profile_count,
   created_at,
   updated_at,
   id
 FROM posts as p
+LEFT JOIN title_freqs ON title_f = p.title
+LEFT JOIN profile_freqs ON profile_label_f = CONCAT(name, '_', age, '_', city)
 WHERE
   -- タイトルが長すぎる投稿は除外
-  LENGTH(title) < 64 --
+  LENGTH(p.title) < 64 --
   --
   -- 名前が長すぎる投稿は除外
   AND LENGTH(name) < 20 --
@@ -47,10 +66,6 @@ WHERE
     FROM ng_words as ng
     WHERE
       p.title LIKE CONCAT('%', word, '%')
-  ) --
-  --
-  -- 投稿日時順に並べ替え
+  )
 ORDER BY
-  posted_at DESC
-LIMIT
-  3000;
+  posted_at DESC;

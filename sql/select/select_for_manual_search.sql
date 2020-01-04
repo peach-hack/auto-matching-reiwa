@@ -1,23 +1,16 @@
 -- USE auto_matching;
 SELECT
+  posted_at,
   title,
   name,
   age,
-  posted_at,
   site,
   genre,
   prefecture,
   city,
-  id,
-  url,
-  created_at,
-  updated_at,
-  image_url,
-  profile_id
+  url
 FROM posts
 ORDER BY
   posted_at DESC
-ORDER BY
-  posted_at DESC
 LIMIT
-  1000;
+  10000;
