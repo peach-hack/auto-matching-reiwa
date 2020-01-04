@@ -1,35 +1,40 @@
 -- USE auto_matching;
 SELECT
+  posted_at,
   title,
   name,
   age,
-  posted_at,
   site,
   genre,
   prefecture,
   city,
-  id,
   created_at,
-  updated_at
-FROM posts
+  updated_at,
+  id
+FROM posts as p
 WHERE
   LENGTH(title) < 64
-  AND LENGTH(name) < 20
+  AND LENGTH(name) < 20 -- AND NOT EXISTS(
+  --   SELECT
+  --     word
+  --   FROM ng_words as ng
+  --   WHERE
+  --     title LIKE CONCAT('%', ng.word, '%')
+  -- )
   AND NOT EXISTS(
     SELECT
-      word
-    FROM ng_words
+      name
+    FROM ng_names
     WHERE
-      title LIKE CONCAT('%', word, '%')
+      p.name LIKE CONCAT('%', name, '%')
   )
-  AND name NOT LIKE '%女装%'
-  AND name NOT LIKE '%NH%'
-  AND name NOT LIKE '%◎%'
-  AND name NOT LIKE '%★%'
-  AND name NOT LIKE '%☆%'
-  AND age NOT LIKE '%40%'
-  AND age NOT LIKE '%50%'
-  AND age NOT LIKE '%60%'
+  -- AND NOT EXISTS(
+  --   SELECT
+  --     age
+  --   FROM ng_ages
+  --   WHERE
+  --     age LIKE CONCAT('%', age, '%')
+  -- )
 ORDER BY
   posted_at DESC
 LIMIT
