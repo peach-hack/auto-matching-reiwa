@@ -42,13 +42,15 @@ WHERE
   AND genre != '今からあそぼ'
   AND genre != '既婚者'
   AND genre != '既婚者希望'
+  AND genre != '画像掲示板'
+  AND genre != 'ミドルエイジ'
   AND genre != 'ﾐﾄﾞﾙｴｲｼﾞ/ｼﾆｱ' --
   --
   -- タイトルが長すぎる投稿は除外
-  AND LENGTH(p.title) < 64 --
+  AND LENGTH(p.title) < 48 --
   --
   -- 名前が長すぎる投稿は除外
-  AND LENGTH(name) < 20 --
+  AND LENGTH(name) < 24 --
   --
   -- 地域による除外は保留。
   -- 地方から都会に来て募集してる場合がある。
@@ -87,7 +89,11 @@ WHERE
   -- created_atとposted_atの乖離が1日以上は除外
   AND DATEDIFF(posted_at, created_at) < 2 --
   --
+  --
   -- 1日以内を列挙
-  AND posted_at > (NOW() - INTERVAL 1 DAY)
+  -- AND posted_at > (NOW() - INTERVAL 1 DAY)
+  --
+  -- 4時間以内を列挙
+  AND posted_at > (NOW() - INTERVAL 4 HOUR)
 ORDER BY
   posted_at DESC;

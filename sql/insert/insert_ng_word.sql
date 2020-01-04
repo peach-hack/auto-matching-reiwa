@@ -443,3 +443,51 @@ VALUES
 INSERT IGNORE INTO ng_words
 VALUES
   ('妊娠');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('経験なし');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('妹');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('姉');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('飼');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('DV');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('※');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('早漏');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('遅漏');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('送迎');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('ぱ活');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('脚');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('Iカップ');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('Hカップ');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('歌舞伎');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('女２');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('マン喫');
