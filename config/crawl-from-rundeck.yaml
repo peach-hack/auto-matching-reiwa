@@ -1,0 +1,17 @@
+- defaultTab: nodes
+  description: ''
+  executionEnabled: true
+  id: e8a3e305-3c9d-4f6f-b1f5-b20dad294a9e
+  loglevel: INFO
+  name: crawl-from-rundeck
+  nodeFilterEditable: false
+  scheduleEnabled: true
+  sequence:
+    commands:
+    - exec: /home/tsu-nera/repo/auto-matching-reiwa/bin/crawl-from-rundeck-happymail.sh
+    - exec: /home/tsu-nera/repo/auto-matching-reiwa/bin/crawl-from-rundeck-wakuwaku.sh
+    - exec: /home/tsu-nera/repo/auto-matching-reiwa/bin/crawl-from-rundeck-pcmax.sh
+    - exec: /home/tsu-nera/repo/auto-matching-reiwa/bin/crawl-from-rundeck-ikukuru.sh
+    keepgoing: true
+    strategy: sequential
+  uuid: e8a3e305-3c9d-4f6f-b1f5-b20dad294a9e
