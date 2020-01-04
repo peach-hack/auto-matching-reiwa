@@ -34,7 +34,7 @@ LEFT JOIN profile_freqs ON profile = CONCAT(name, '_', age, '_', city)
 WHERE
   -- ジャンルによるフィルタ
   -- ハッピーメールでピュアのレコードが混じってしまう
-  genre != '大人のﾒｰﾙ/TEL'
+  genre != '大人のﾒｰﾙ/TEL'
   AND genre != '恋人募集'
   AND genre != 'メル友募集'
   AND genre != '全国ﾒﾙ友'
