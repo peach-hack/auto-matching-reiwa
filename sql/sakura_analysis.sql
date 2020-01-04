@@ -22,21 +22,21 @@ WHERE
     FROM ng_ages
     WHERE
       p.age LIKE CONCAT(age, '%')
-  )
+  ) -- 名前にNGワードが含まれている投稿を除外
   AND NOT EXISTS(
     SELECT
       name
     FROM ng_names
     WHERE
       p.name LIKE CONCAT('%', name, '%')
-  )
+  ) -- タイトルにNGワードが含まれている投稿を除外
   AND NOT EXISTS(
     SELECT
       word
     FROM ng_words as ng
     WHERE
       p.title LIKE CONCAT('%', word, '%')
-  )
+  ) -- 投稿日時順に並べ替え
 ORDER BY
   posted_at DESC
 LIMIT
