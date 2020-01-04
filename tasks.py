@@ -126,8 +126,46 @@ def crawl_ikukuru_kanagawa(c, days):
 
 
 @task
+def crawl_mint(c):
+    name = "mint"
+    crawl_base(1, name)
+
+
+@task
+def crawl_mint_tokyo(c):
+    name = "mint"
+    crawl_base_tokyo(1, name)
+
+
+@task
+def crawl_mint_kanagawa(c):
+    name = "mint"
+    crawl_base_kanagawa(1, name)
+
+
+@task
+def crawl_merupara(c):
+    name = "merupara"
+    crawl_base(1, name)
+
+
+@task
+def crawl_merupara_tokyo(c):
+    name = "merupara"
+    crawl_base_tokyo(1, name)
+
+
+@task
+def crawl_merupara_kanagawa(c):
+    name = "merupara"
+    crawl_base_kanagawa(1, name)
+
+
+@task
 def crawl_from_cron(c):
     crawl_happymail(c)
     crawl_wakuwaku(c, 1)
     crawl_pcmax(c)
     crawl_ikukuru(c, 1)
+    crawl_mint(c)
+    crawl_merupara(c)
