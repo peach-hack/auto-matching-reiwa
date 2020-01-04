@@ -17,7 +17,5 @@ SELECT
 FROM posts
 ORDER BY
   posted_at DESC
-ORDER BY
-  posted_at DESC
 LIMIT
-  1000;
+  10000;

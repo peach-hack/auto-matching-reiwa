@@ -8,11 +8,11 @@ WITH title_freqs AS (
 ),
 profile_freqs AS (
   SELECT
-    CONCAT(name, '_', age, '_', city) as profile_label_f,
+    CONCAT(name, '_', age, '_', city) as profile,
     COUNT(CONCAT(name, '_', age, '_', city)) as profile_count
   FROM posts
   GROUP BY
-    profile_label_f
+    profile
 )
 SELECT
   posted_at,
@@ -27,10 +27,10 @@ SELECT
   profile_count,
   created_at,
   updated_at,
-  id
+  url
 FROM posts as p
 LEFT JOIN title_freqs ON title_f = p.title
-LEFT JOIN profile_freqs ON profile_label_f = CONCAT(name, '_', age, '_', city)
+LEFT JOIN profile_freqs ON profile = CONCAT(name, '_', age, '_', city)
 WHERE
   -- タイトルが長すぎる投稿は除外
   LENGTH(p.title) < 64 --
@@ -66,6 +66,14 @@ WHERE
     FROM ng_words as ng
     WHERE
       p.title LIKE CONCAT('%', word, '%')
-  )
+  ) --
+  --
+  -- タイトルとプロフィールの出現回数がともに３回以内の投稿
+  AND (
+    profile_count <= 3
+    AND title_count <= 3
+  ) --
+  -- created_atとposted_atの乖離が1日以上は除外
+  AND DATEDIFF(posted_at, created_at) < 2
 ORDER BY
   posted_at DESC;
