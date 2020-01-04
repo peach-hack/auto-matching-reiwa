@@ -10,7 +10,7 @@ from selenium.common.exceptions import NoSuchElementException
 import engine.env as env
 
 from ..items.post import PostItem
-from ..constants.common import USER_AGENT_PIXEL3
+from ..constants.common import USER_AGENT_PIXEL3, CHROMEDRIVER_PATH
 
 PCMAX_DOMAIN = 'pcmax.jp'
 PCMAX_BASE_URL = 'https://pcmax.jp'
@@ -44,7 +44,8 @@ class PcmaxSpider(scrapy.Spider):
         mobile_emulation = {"deviceName": "Nexus 5"}
         options.add_experimental_option("mobileEmulation", mobile_emulation)
 
-        self.driver = Chrome(options=options)
+        self.driver = Chrome(options=options,
+                             executable_path=CHROMEDRIVER_PATH)
 
     def parse(self, response):
 

@@ -2,3 +2,4 @@ rawdata
 data/*_out.csv
 .vscode
 sql/private
+log

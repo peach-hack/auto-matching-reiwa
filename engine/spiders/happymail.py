@@ -11,7 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import engine.env as env
 
 from ..items.post import PostItem
-from ..constants.common import USER_AGENT_PIXEL3
+from ..constants.common import USER_AGENT_PIXEL3, CHROMEDRIVER_PATH
 
 HAPPYMAIL_DOMAIN = 'happymail.co.jp'
 HAPPYMAIL_BASE_URL = 'https://happymail.co.jp'
@@ -46,7 +46,8 @@ class HappymailSpider(scrapy.Spider):
         mobile_emulation = {"deviceName": "Nexus 5"}
         options.add_experimental_option("mobileEmulation", mobile_emulation)
 
-        self.driver = Chrome(options=options)
+        self.driver = Chrome(options=options,
+                             executable_path=CHROMEDRIVER_PATH)
 
     def parse(self, response):
 
