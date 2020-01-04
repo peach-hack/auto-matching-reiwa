@@ -9,11 +9,11 @@
 
 ## 概要
 
-令和版統合出会い系エンジン(IDE: Integreted Deai Engine).
+統合出会い系エンジン(IDE: Integreted Deai Engine).
 
-出会い系マッチングサイトを AI、データ分析、自動化を駆使してハッキングする Web アプリです。平成の伝説のアプリ、[Auto Matching](https://github.com/peach-hack/auto-matching)を令和の時代に再定義し、一から再構築します。
+出会い系マッチングサイトを AI、データ分析、自動化を駆使してハッキングします。[Auto Matching](https://github.com/peach-hack/auto-matching)のリメイクです。今回はPythonとSQLをつかっています。
 
-今回は、とりあえずスクレイピングしてきたデータをローカルのMySQLに入れて、SQLによるサクラ判定を実装してみました。サービス化は余裕があればやります。
+とりあえずスクレイピングしてきたデータをローカルのMySQLに入れて、SQLによるサクラ判定を実装してみました。大体1日に8000レコードずつ溜まっていきますが、サクラ判定をかけると300レコードくらいまで絞り込めます。
 
 * https://github.com/peach-hack/auto-matching-reiwa/blob/master/sql/sakura_analysis.sql
 
@@ -25,6 +25,8 @@ Tinderはモチベーションが高まったら対応します。
 - [ワクワクメール](https://550909.com/?f6858637)
 - [PCMAX](https://pcmax.jp/lp/?ad_id=rm181904)
 - [イククル](https://194964.com/AF1213451)
+- [ミントC!Jメール](https://mintj.com/?mdc=991&afguid=1iojxazbuotgo2d2n8pf4xszii)
+- [メルパラ](https://meru-para.com/?mdc=991&afguid=1y803u9dpjvt42admh2jxq7tv6)
 
 ## 新規環境構築
 
