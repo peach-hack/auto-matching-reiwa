@@ -17,3 +17,7 @@ scrapy crawl -a area=${AREA_TOKYO} -a days=1 happymail --loglevel=INFO
 scrapy crawl -a area=${AREA_KANAGAWA} -a days=1 happymail --loglevel=INFO
 scrapy crawl -a area=${AREA_TOKYO} -a days=1 pcmax --loglevel=INFO
 scrapy crawl -a area=${AREA_KANAGAWA} -a days=1 pcmax --loglevel=INFO
+scrapy crawl -a area=${AREA_TOKYO} -a days=1 mint --loglevel=INFO
+scrapy crawl -a area=${AREA_KANAGAWA} -a days=1 mint --loglevel=INFO
+scrapy crawl -a area=${AREA_TOKYO} -a days=1 merupara --loglevel=INFO
+scrapy crawl -a area=${AREA_KANAGAWA} -a days=1 merupara --loglevel=INFO

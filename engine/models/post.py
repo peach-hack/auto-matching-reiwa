@@ -13,7 +13,7 @@ class Post(Base):
     profile_id = Column(String(128))
     name = Column(String(50))
     age = Column(String(10))
-    title = Column(String(50))
+    title = Column(String(128))
     url = Column(String(200))
     image_url = Column(String(500))
     posted_at = Column(DateTime)
