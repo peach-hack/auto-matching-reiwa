@@ -1,12 +1,10 @@
 import scrapy
-from scrapy.utils.response import open_in_browser
+# from scrapy.utils.response import open_in_browser
 
 import time
 import datetime
 
 from selenium.webdriver import Chrome, ChromeOptions
-from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import NoSuchElementException
 
 import engine.env as env
 

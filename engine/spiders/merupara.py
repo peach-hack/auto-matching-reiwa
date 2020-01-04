@@ -1,12 +1,10 @@
 import scrapy
-from scrapy.utils.response import open_in_browser
+# from scrapy.utils.response import open_in_browser
 
 import time
 import datetime
 
 from selenium.webdriver import Chrome, ChromeOptions
-from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import NoSuchElementException
 
 import engine.env as env
 
@@ -35,7 +33,7 @@ class MeruparaSpider(scrapy.Spider):
 
         options = ChromeOptions()
 
-        # options.add_argument("--headless")
+        options.add_argument("--headless")
 
         options.add_argument('--user-agent={}'.format(USER_AGENT_PIXEL3))
 
@@ -63,8 +61,6 @@ class MeruparaSpider(scrapy.Spider):
         self.driver.find_element_by_name("B1login").click()
 
         time.sleep(1)
-
-        return
 
         # 地域の設定
         if self.area == "東京都":
@@ -167,7 +163,7 @@ class MeruparaSpider(scrapy.Spider):
 
             post['posted_at'] = posted_at
 
-            post['site'] = "ミントJメール"
+            post['site'] = "メルパラ"
 
             yield post
 
