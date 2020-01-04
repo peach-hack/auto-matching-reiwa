@@ -115,10 +115,10 @@ VALUES
   ('条件');
 INSERT IGNORE INTO ng_words
 VALUES
-  ('ひやかし');
+  ('ひやか');
 INSERT IGNORE INTO ng_words
 VALUES
-  ('冷やかし');
+  ('冷やか');
 INSERT IGNORE INTO ng_words
 VALUES
   ('爆乳');
@@ -230,3 +230,189 @@ VALUES
 INSERT IGNORE INTO ng_words
 VALUES
   ('■');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('泡姫');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('風俗');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('ペニス');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('息子');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('マンキ');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('A・V');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('中出し');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('撮影');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('タイツ');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('前立腺');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('プロフ');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('ドタキャン');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('素人');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('業者');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('セ○レ');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('おばさん');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('男性経験');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('女性経験');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('負担');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('白衣');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('とぷ画');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('ペニバン');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('なま');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('水商売');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('まま');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('ママ');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('ぱぱ');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('パパ');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('パンツ');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('ぱんつ');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('おしゃぶり');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('パンパン');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('ハプバー');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('AV');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('ホテル代');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('ホ代');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('オーガズム');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('ネットカフェ');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('セ〇レ');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('未経験');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('即会い');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('即ホ');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('写真');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('写メ');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('ピンサロ');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('ピンクサロン');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('コスプ');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('子持ち');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('シングルマザー');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('子供');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('ぼっちゃり');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('ぽちゃ');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('聖水');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('Tバック');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('私持ち');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('声優');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('女優');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('和服');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('浴衣');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('着物');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('混浴');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('排泄');

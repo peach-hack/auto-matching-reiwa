@@ -30,14 +30,14 @@ WHERE
     WHERE
       p.name LIKE CONCAT('%', name, '%')
   )
-  -- AND NOT EXISTS(
-  --   SELECT
-  --     word
-  --   FROM ng_words as ng
-  --   WHERE
-  --     title LIKE CONCAT('%', ng.word, '%')
-  -- )
+  AND NOT EXISTS(
+    SELECT
+      word
+    FROM ng_words as ng
+    WHERE
+      p.title LIKE CONCAT('%', word, '%')
+  )
 ORDER BY
   posted_at DESC
 LIMIT
-  10000;
+  3000;
