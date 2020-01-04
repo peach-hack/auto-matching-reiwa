@@ -19,6 +19,9 @@ MINT_LOGIN_URL = "https://mintj.com/msm/login"
 MINT_ENTRY_URL = MINT_BASE_URL + '/msm'
 MINT_BOARD_URL = MINT_ENTRY_URL + "/BBS/?sid=&ma=ad1&cid=0"
 
+MINT_MOVE_TOKYO_URL = "https://mintj.com/ms/mb/Prof.aspx?sid=&f=6&s=8&r=2"
+MINT_MOVE_KANAGAWA_URL = "https://mintj.com/ms/mb/Prof.aspx?sid=&f=6&s=9&r=2"
+
 
 class MintSpider(scrapy.Spider):
     name = 'mint'
@@ -61,11 +64,20 @@ class MintSpider(scrapy.Spider):
 
         time.sleep(1)
 
-        # 地域の設定 TODO
+        # 地域の設定
+        if self.area == "東京都":
+            move_url = MINT_MOVE_TOKYO_URL
+        else:
+            move_url = MINT_MOVE_KANAGAWA_URL
+
+        self.driver.get(move_url)
+        time.sleep(1)
+
+        self.driver.find_element_by_name("B2City").click()
+        time.sleep(1)
 
         # 掲示板へ移動
         self.driver.get(MINT_BOARD_URL)
-
         time.sleep(1)
 
         now = datetime.datetime.now()
