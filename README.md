@@ -17,6 +17,8 @@
 
 * https://github.com/peach-hack/auto-matching-reiwa/blob/master/sql/sakura_analysis.sql
 
+1時間に1度定期実行をかけてクローリングをしている。cronをつかっていたけど、Rundeckといういいツールをみつけたので、こちらで運用中。
+
 Tinderはモチベーションが高まったら対応します。
 
 ### 対応サイト
