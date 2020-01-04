@@ -1,4 +1,5 @@
 import scrapy
+from scrapy.utils.response import open_in_browser
 
 import time
 import datetime
@@ -60,91 +61,82 @@ class MintSpider(scrapy.Spider):
 
         time.sleep(1)
 
-        return
+        # 地域の設定 TODO
 
         # 掲示板へ移動
         self.driver.get(MINT_BOARD_URL)
 
         time.sleep(1)
 
-        # カテゴリの選択
-        # スグ会いたいは defaultで選択されている
+        # def is_scroll_end():
+        #     try:
+        #         self.driver.find_element_by_id('ajax-message')
+        #     except NoSuchElementException:
+        #         return False
+        #     return True
 
-        def select_category(n):
-            script = 'document.querySelector("#bbs_category{}").click()'.format(  # noqa
-                n)
-            self.driver.execute_script(script)
-
-        select_category(3)  # スグじゃないけど
-        select_category(8)  # 既婚者OK
-        select_category(21)  # 変態さん募集
-
-        # 地域を選択
-        pref_no = "22" if self.area == "東京都" else "23"
-        element = self.driver.find_element_by_name('pref_no')
-        select_element = Select(element)
-        select_element.select_by_value(pref_no)
-
-        # 40歳以上を検索から除外
-        element = self.driver.find_element_by_name('to_age')
-        select_element = Select(element)
-        select_element.select_by_value("40")
-
-        # 検索実行
-        self.driver.find_element_by_name("search").click()
-        time.sleep(5)
-
-        def is_scroll_end():
-            try:
-                self.driver.find_element_by_id('ajax-message')
-            except NoSuchElementException:
-                return False
-            return True
-
-        while not is_scroll_end():
-            script = 'window.scrollTo(0, document.body.scrollHeight);'
-            self.driver.execute_script(script)
-            time.sleep(3)
+        # while not is_scroll_end():
+        #     script = 'window.scrollTo(0, document.body.scrollHeight);'
+        #     self.driver.execute_script(script)
+        #     time.sleep(3)
 
         response_body = self.driver.page_source.encode('cp932', 'ignore')
         response = response.replace(body=response_body)
 
-        post_list = response.css('.item_box')
+        now = datetime.datetime.now()
+
+        post_list = response.css('ul#ulList>li')
 
         for item in post_list:
             post = PostItem()
 
-            id = item.css('.search_btn>a::attr(onclick)').re_first(
-                'viewBbs\((.*)\)')  # noqa
+            id = item.css('dd>a::attr(href)').re_first(
+                '/msm/BBS/Read/(.*)\/\?sid=&*')  # noqa
 
             if id is None:
                 continue
 
             post['id'] = id
-            post['profile_id'] = item.css(
-                '.search_btn>a::attr(id)').extract_first()
-            post["url"] = "https://pcmax.jp/mobile/bbs_detail.php?bbs_id=" + id
+            post['profile_id'] = ""
+            partial_url = item.css('dd>a::attr(href)').extract_first()
+            post["url"] = MINT_BASE_URL + partial_url
 
-            post["image_url"] = ""  # 小さすぎるのでとりあえずいらない
+            post["image_url"] = item.css(
+                'dt>span>img::attr(src)').extract_first()
 
             post["name"] = item.css(
-                'span.value1>span>font::text').extract_first().strip()
+                'span.list_text::text').extract_first().strip()
             post["prefecture"] = self.area
 
-            post["genre"] = item.css('span.value1::text')[4].extract().strip()
+            post["genre"] = item.css('dd>a>span::text').extract_first().strip()
 
-            post["city"] = item.css('span.value1::text')[2].extract().replace(
-                self.area, "").strip()
-            post["age"] = item.css('span.value1::text')[1].extract().strip(
-                '\xa0').strip()
+            city_base = item.css('span.list_subtext::text').extract()[1]
+            if self.area == "東京都":
+                post['city'] = city_base.replace('東京', '').strip()
+            else:
+                post['city'] = city_base.replace('神奈川', '').strip()
+
+            post["age"] = item.css('span.list_subtext::text').extract_first(
+            ).split("\xa0")[0].strip()
 
             post['title'] = item.css(
-                '.title_link::text').extract_first().strip()
-            posted_at_str = item.css('span.value1::text')[3].extract()
-            post['posted_at'] = datetime.datetime.strptime(
-                posted_at_str, '%Y年%m月%d日 %H:%M')
+                'span.list_title::text').extract_first().strip()
 
-            post['site'] = "MINT"
+            posted_at_str = item.css('time::text').extract_first().strip()
+            try:
+                posted_at = datetime.datetime.strptime(posted_at_str,
+                                                       '%m/%d %H:%M')
+            except Exception:
+                posted_at = datetime.datetime.strptime(posted_at_str,
+                                                       '%Y/%m/%d %H:%M')
+            if now.month == 1 and posted_at.month == 12:
+                posted_at = posted_at.replace(year=now.year - 1)
+            else:
+                posted_at = posted_at.replace(year=now.year)
+
+            post['posted_at'] = posted_at
+
+            post['site'] = "ミントJメール"
 
             yield post
 
