@@ -1,5 +1,5 @@
 - defaultTab: nodes
-  description: ''
+  description: 1時間に1回。
   executionEnabled: true
   id: e8a3e305-3c9d-4f6f-b1f5-b20dad294a9e
   loglevel: INFO
@@ -14,7 +14,7 @@
       minute: '0'
       seconds: '0'
     year: '*'
-  scheduleEnabled: true
+  scheduleEnabled: false
   sequence:
     commands:
     - description: ハッピーメール
@@ -25,6 +25,10 @@
       exec: /home/tsu-nera/repo/auto-matching-reiwa/bin/crawl-from-rundeck-pcmax.sh
     - description: イククル
       exec: /home/tsu-nera/repo/auto-matching-reiwa/bin/crawl-from-rundeck-ikukuru.sh
+    - description: ミントJメール
+      exec: /home/tsu-nera/repo/auto-matching-reiwa/bin/crawl-from-rundeck-mint.sh
+    - description: メルパラ
+      exec: /home/tsu-nera/repo/auto-matching-reiwa/bin/crawl-from-rundeck-merupara.sh
     keepgoing: true
     strategy: sequential
   uuid: e8a3e305-3c9d-4f6f-b1f5-b20dad294a9e

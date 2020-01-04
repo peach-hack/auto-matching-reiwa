@@ -11,23 +11,23 @@ import engine.env as env
 from ..items.post import PostItem
 from ..constants.common import USER_AGENT_PIXEL3, CHROMEDRIVER_PATH
 
-MINT_DOMAIN = 'mintj.com'
-MINT_BASE_URL = 'https://mintj.com'
-MINT_LOGIN_URL = "https://mintj.com/msm/login"
-MINT_ENTRY_URL = MINT_BASE_URL + '/msm'
-MINT_BOARD_URL = MINT_ENTRY_URL + "/BBS/?sid=&ma=ad1&cid=0"
+MERUPARA_DOMAIN = 'meru-para.com'
+MERUPARA_BASE_URL = 'https://meru-para.com'
+MERUPARA_LOGIN_URL = "https://meru-para.com/msm/login"
+MERUPARA_ENTRY_URL = MERUPARA_BASE_URL + '/msm'
+MERUPARA_BOARD_URL = MERUPARA_ENTRY_URL + "/BBS/?sid=&ma=ad1&cid=0"
 
-MINT_MOVE_TOKYO_URL = "https://mintj.com/ms/mb/Prof.aspx?sid=&f=6&s=8&r=2"
-MINT_MOVE_KANAGAWA_URL = "https://mintj.com/ms/mb/Prof.aspx?sid=&f=6&s=9&r=2"
+MERUPARA_MOVE_TOKYO_URL = "https://meru-para.com/ms/mb/Prof.aspx?sid=&f=6&s=8&r=2"
+MERUPARA_MOVE_KANAGAWA_URL = "https://meru-para.com/ms/mb/Prof.aspx?sid=&f=6&s=9&r=2"
 
 
-class MintSpider(scrapy.Spider):
-    name = 'mint'
-    allowed_domains = [MINT_DOMAIN]
-    start_urls = [MINT_LOGIN_URL]
+class MeruparaSpider(scrapy.Spider):
+    name = 'merupara'
+    allowed_domains = [MERUPARA_DOMAIN]
+    start_urls = [MERUPARA_LOGIN_URL]
 
     def __init__(self, area="神奈川県", days=7, *args, **kwargs):
-        super(MintSpider, self).__init__(*args, **kwargs)
+        super(MeruparaSpider, self).__init__(*args, **kwargs)
         self.area = area
         self.days = int(days)
 
@@ -55,18 +55,18 @@ class MintSpider(scrapy.Spider):
         self.driver.get(response.url)
 
         self.driver.find_element_by_id("loginid").send_keys(
-            env.MINT_LOGIN_USER)
+            env.MERUPARA_LOGIN_USER)
         self.driver.find_element_by_id("pwd").send_keys(
-            env.MINT_LOGIN_PASSWORD)
+            env.MERUPARA_LOGIN_PASSWORD)
         self.driver.find_element_by_name("B1login").click()
 
         time.sleep(1)
 
         # 地域の設定
         if self.area == "東京都":
-            move_url = MINT_MOVE_TOKYO_URL
+            move_url = MERUPARA_MOVE_TOKYO_URL
         else:
-            move_url = MINT_MOVE_KANAGAWA_URL
+            move_url = MERUPARA_MOVE_KANAGAWA_URL
 
         self.driver.get(move_url)
         time.sleep(1)
@@ -75,7 +75,7 @@ class MintSpider(scrapy.Spider):
         time.sleep(1)
 
         # 掲示板へ移動
-        self.driver.get(MINT_BOARD_URL)
+        self.driver.get(MERUPARA_BOARD_URL)
         time.sleep(1)
 
         now = datetime.datetime.now()
@@ -126,7 +126,7 @@ class MintSpider(scrapy.Spider):
             post['id'] = id
             post['profile_id'] = ""
             partial_url = item.css('dd>a::attr(href)').extract_first()
-            post["url"] = MINT_BASE_URL + partial_url
+            post["url"] = MERUPARA_BASE_URL + partial_url
 
             post["image_url"] = item.css(
                 'dt>span>img::attr(src)').extract_first()
@@ -163,7 +163,7 @@ class MintSpider(scrapy.Spider):
 
             post['posted_at'] = posted_at
 
-            post['site'] = "ミントJメール"
+            post['site'] = "メルパラ"
 
             yield post
 
