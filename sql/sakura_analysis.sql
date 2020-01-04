@@ -13,14 +13,16 @@ SELECT
   id
 FROM posts as p
 WHERE
-  LENGTH(title) < 64
-  AND LENGTH(name) < 20 -- AND NOT EXISTS(
-  --   SELECT
-  --     word
-  --   FROM ng_words as ng
-  --   WHERE
-  --     title LIKE CONCAT('%', ng.word, '%')
-  -- )
+  -- タイトルが長すぎる投稿は除外
+  LENGTH(title) < 64 -- 名前が長すぎる投稿は除外
+  AND LENGTH(name) < 20 -- 年齢が対象外の人は除外
+  AND NOT EXISTS(
+    SELECT
+      age
+    FROM ng_ages
+    WHERE
+      p.age LIKE CONCAT(age, '%')
+  )
   AND NOT EXISTS(
     SELECT
       name
@@ -30,10 +32,10 @@ WHERE
   )
   -- AND NOT EXISTS(
   --   SELECT
-  --     age
-  --   FROM ng_ages
+  --     word
+  --   FROM ng_words as ng
   --   WHERE
-  --     age LIKE CONCAT('%', age, '%')
+  --     title LIKE CONCAT('%', ng.word, '%')
   -- )
 ORDER BY
   posted_at DESC
