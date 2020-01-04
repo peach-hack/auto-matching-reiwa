@@ -68,22 +68,39 @@ class MintSpider(scrapy.Spider):
 
         time.sleep(1)
 
-        # def is_scroll_end():
-        #     try:
-        #         self.driver.find_element_by_id('ajax-message')
-        #     except NoSuchElementException:
-        #         return False
-        #     return True
+        now = datetime.datetime.now()
 
-        # while not is_scroll_end():
-        #     script = 'window.scrollTo(0, document.body.scrollHeight);'
-        #     self.driver.execute_script(script)
-        #     time.sleep(3)
+        def is_scroll_end():
+            response_body = self.driver.page_source.encode('cp932', 'ignore')
+            temp_resp = response.replace(body=response_body)
+            last_item = temp_resp.css('ul#ulList>li')[-1]
+            posted_at_str = last_item.css('time::text').extract_first().strip()
+
+            try:
+                posted_at = datetime.datetime.strptime(posted_at_str,
+                                                       '%m/%d %H:%M')
+            except Exception:
+                posted_at = datetime.datetime.strptime(posted_at_str,
+                                                       '%Y/%m/%d %H:%M')
+            if now.month == 1 and posted_at.month == 12:
+                last_posted_at = posted_at.replace(year=now.year - 1)
+            else:
+                last_posted_at = posted_at.replace(year=now.year)
+
+            days_ago = now - datetime.timedelta(days=self.days)
+
+            if last_posted_at > days_ago:
+                return False
+            else:
+                return True
+
+        while not is_scroll_end():
+            script = 'document.getElementById("nextPageLink").click();'
+            self.driver.execute_script(script)
+            time.sleep(1)
 
         response_body = self.driver.page_source.encode('cp932', 'ignore')
         response = response.replace(body=response_body)
-
-        now = datetime.datetime.now()
 
         post_list = response.css('ul#ulList>li')
 
