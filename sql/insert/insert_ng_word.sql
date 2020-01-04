@@ -416,3 +416,30 @@ VALUES
 INSERT IGNORE INTO ng_words
 VALUES
   ('排泄');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('NH');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('閲覧注意');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('ピンチ');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('メイド');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('おしっこ');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('助け');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('たすけ');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('したぎ');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('妊娠');

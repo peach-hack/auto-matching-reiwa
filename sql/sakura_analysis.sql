@@ -32,8 +32,20 @@ FROM posts as p
 LEFT JOIN title_freqs ON title_f = p.title
 LEFT JOIN profile_freqs ON profile = CONCAT(name, '_', age, '_', city)
 WHERE
+  -- ジャンルによるフィルタ
+  -- ハッピーメールでピュアのレコードが混じってしまう
+  genre != '大人のﾒｰﾙ/TEL'
+  AND genre != '恋人募集'
+  AND genre != 'メル友募集'
+  AND genre != '全国ﾒﾙ友'
+  AND genre != '友達募集'
+  AND genre != '今からあそぼ'
+  AND genre != '既婚者'
+  AND genre != '既婚者希望'
+  AND genre != 'ﾐﾄﾞﾙｴｲｼﾞ/ｼﾆｱ' --
+  --
   -- タイトルが長すぎる投稿は除外
-  LENGTH(p.title) < 64 --
+  AND LENGTH(p.title) < 64 --
   --
   -- 名前が長すぎる投稿は除外
   AND LENGTH(name) < 20 --
@@ -68,12 +80,14 @@ WHERE
       p.title LIKE CONCAT('%', word, '%')
   ) --
   --
-  -- タイトルとプロフィールの出現回数がともに３回以内の投稿
-  AND (
-    profile_count <= 3
-    AND title_count <= 3
-  ) --
+  -- タイトルとプロフィールの出現回数の制限
+  AND profile_count <= 2
+  AND title_count = 1 --
+  --
   -- created_atとposted_atの乖離が1日以上は除外
-  AND DATEDIFF(posted_at, created_at) < 2
+  AND DATEDIFF(posted_at, created_at) < 2 --
+  --
+  -- 1日以内を列挙
+  AND posted_at > (NOW() - INTERVAL 1 DAY)
 ORDER BY
   posted_at DESC;
