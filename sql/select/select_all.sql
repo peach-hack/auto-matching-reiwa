@@ -1,9 +1,9 @@
 -- USE auto_matching;
 SELECT
+  posted_at,
   title,
   name,
   age,
-  posted_at,
   site,
   genre,
   prefecture,
