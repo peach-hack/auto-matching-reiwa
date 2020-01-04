@@ -13,15 +13,18 @@
 
 出会い系マッチングサイトを AI、データ分析、自動化を駆使してハッキングする Web アプリです。平成の伝説のアプリ、[Auto Matching](https://github.com/peach-hack/auto-matching)を令和の時代に再定義し、一から再構築します。
 
-### 対応サイト
+今回は、とりあえずスクレイピングしてきたデータをローカルのMySQLに入れて、SQLによるサクラ判定を実装してみました。サービス化は余裕があればやります。
 
-古典的掲示版型サイトに加えて、今回は東京オリンピックを視野に入れて Tinder を攻略することを目指します。
+* https://github.com/peach-hack/auto-matching-reiwa/blob/master/sql/sakura_analysis.sql
+
+Tinderはモチベーションが高まったら対応します。
+
+### 対応サイト
 
 - [ハッピーメール](https://happymail.co.jp/?af14212217)
 - [ワクワクメール](https://550909.com/?f6858637)
 - [PCMAX](https://pcmax.jp/lp/?ad_id=rm181904)
 - [イククル](https://194964.com/AF1213451)
-- [Tinder](https://tinder.com/)
 
 ## 新規環境構築
 
@@ -45,11 +48,3 @@
 
 ハッピーメール, ワクワクメール, PCMAX, イククルの4サイトのデータ分析。
 * https://github.com/peach-hack/auto-matching-reiwa/blob/master/notebooks/data-analysis.ipynb
-
-## Policy
-
-進捗よりは成長を尊ぶ。結果よりも過程を重視。
-
-プロジェクトの達成が目的ではなくて、取り組みによる自己の成長が目的。
-
-予定通りに進まなくて回り道しても、学びがあればまったく順調である。
