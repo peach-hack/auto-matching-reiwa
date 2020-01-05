@@ -91,8 +91,8 @@ WHERE
   AND profile_count <= 2
   AND title_count = 1 --
   --
-  -- created_atとposted_atの乖離が1日以上は除外
-  AND DATEDIFF(posted_at, created_at) < 2 --
+  -- created_atとupdated_atの乖離があるものは再投稿を繰り替えしているので除外
+  AND (updated_at - INTERVAL 6 HOUR) < created_at --
   --
   --
   -- 1日以内を列挙
