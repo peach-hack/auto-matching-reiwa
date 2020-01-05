@@ -497,3 +497,12 @@ VALUES
 INSERT IGNORE INTO ng_words
 VALUES
   ('家出');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('手のみ');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('手こき');
+INSERT IGNORE INTO ng_words
+VALUES
+  ('手コキ');
