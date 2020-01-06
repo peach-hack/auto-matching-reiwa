@@ -98,7 +98,7 @@ WHERE
   -- 1日以内を列挙
   -- AND posted_at > (NOW() - INTERVAL 1 DAY)
   --
-  -- 4時間以内を列挙
-  AND posted_at > (NOW() - INTERVAL 4 HOUR)
+  -- 3時間以内を列挙
+  AND posted_at > (NOW() - INTERVAL 3 HOUR)
 ORDER BY
   posted_at DESC;
