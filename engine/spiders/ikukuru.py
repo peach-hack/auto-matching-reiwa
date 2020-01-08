@@ -34,6 +34,8 @@ IKUKURU_BOARD_MIDDLEAGE_URL = get_ikukuru_board_url(
     "R2psRFFSd3VPSE5oZFlBdTkrUXhPc0ZWeVhvdWpDd0JsaG9NTHNSSXpOWT0%3D")
 IKUKURU_BOARD_ABNORMAL_URL = get_ikukuru_board_url(
     "NHB2TUxzTDZOTUVSaTZOUjFnWkJYZnNadkoxU2hQNVNQblRnT1ZJUlV4ND0%3D")
+IKUKURU_BOARD_MAILH_URL = get_ikukuru_board_url(
+    "WFNWanBpdmRQaGRBUDdBYW5xNmZCQi81c09wcWc5a05hKzhsR2dUeEd6MD0%3D")
 
 
 class IkukuruSpider(scrapy.Spider):
@@ -66,7 +68,7 @@ class IkukuruSpider(scrapy.Spider):
         board_url_list = [
             IKUKURU_BOARD_SUGUAITAI_URL, IKUKURU_BOARD_HIMITSU_URL,
             IKUKURU_BOARD_ABNORMAL_URL, IKUKURU_BOARD_KIKONSHABOSHU_URL,
-            IKUKURU_BOARD_MIDDLEAGE_URL
+            IKUKURU_BOARD_MIDDLEAGE_URL, IKUKURU_BOARD_MAILH_URL
         ]
 
         for board_url in board_url_list:

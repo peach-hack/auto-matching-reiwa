@@ -38,6 +38,9 @@ WHERE
   -- ジャンルによるフィルタ
   -- ハッピーメールでピュアのレコードが混じってしまう
   genre != '大人のﾒｰﾙ/TEL'
+  AND genre != 'Hなお話'
+  AND genre != 'エロトーク・TELH'
+  AND genre != 'メールH'
   AND genre != '恋人募集'
   AND genre != 'メル友募集'
   AND genre != '全国ﾒﾙ友'

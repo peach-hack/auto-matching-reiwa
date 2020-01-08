@@ -78,6 +78,7 @@ class PcmaxSpider(scrapy.Spider):
         select_category(3)  # スグじゃないけど
         select_category(8)  # 既婚者OK
         select_category(21)  # 変態さん募集
+        select_category(4)  # エロトーク・TELH
 
         # 地域を選択
         pref_no = "22" if self.area == "東京都" else "23"

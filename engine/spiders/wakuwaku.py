@@ -28,6 +28,7 @@ WAKUWAKU_BOARD_OTONANOKOIBITOKOUHO_URL = get_wakuwaku_board_url(6)
 WAKUWAKU_BOARD_ABNORMAL_URL = get_wakuwaku_board_url(8)
 WAKUWAKU_BOARD_MIDDLEAGE_URL = get_wakuwaku_board_url(15)
 WAKUWAKU_BOARD_KIKONSHA_URL = get_wakuwaku_board_url(21)
+WAKUWAKU_BOARD_HNAOHANASHI_URL = get_wakuwaku_board_url(7)
 
 
 class WakuwakuSpider(scrapy.Spider):
@@ -58,12 +59,10 @@ class WakuwakuSpider(scrapy.Spider):
 
     def set_area(self, response):
         board_url_list = [
-            WAKUWAKU_BOARD_SUGUAITAI_URL,
-            WAKUWAKU_BOARD_KYOJANAIKEDO_URL,
-            WAKUWAKU_BOARD_ADULT_URL,
-            WAKUWAKU_BOARD_OTONANOKOIBITOKOUHO_URL,
-            WAKUWAKU_BOARD_ABNORMAL_URL,
-            WAKUWAKU_BOARD_MIDDLEAGE_URL,
+            WAKUWAKU_BOARD_SUGUAITAI_URL, WAKUWAKU_BOARD_KYOJANAIKEDO_URL,
+            WAKUWAKU_BOARD_ADULT_URL, WAKUWAKU_BOARD_OTONANOKOIBITOKOUHO_URL,
+            WAKUWAKU_BOARD_ABNORMAL_URL, WAKUWAKU_BOARD_MIDDLEAGE_URL,
+            WAKUWAKU_BOARD_HNAOHANASHI_URL
         ]
 
         for board_url in board_url_list:
