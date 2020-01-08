@@ -104,10 +104,16 @@ class MeruparaSpider(scrapy.Spider):
             else:
                 return True
 
+        scroll_counter = 0
+
         while not is_scroll_end():
             script = 'document.getElementById("nextPageLink").click();'
             self.driver.execute_script(script)
             time.sleep(1)
+
+            scroll_counter += 1
+            if scroll_counter > 10:
+                break
 
         response_body = self.driver.page_source.encode('cp932', 'ignore')
         response = response.replace(body=response_body)
@@ -125,6 +131,7 @@ class MeruparaSpider(scrapy.Spider):
 
             post['id'] = id
             post['profile_id'] = ""
+            post['profile_url'] = ""
             partial_url = item.css('dd>a::attr(href)').extract_first()
             post["url"] = MERUPARA_BASE_URL + partial_url
 

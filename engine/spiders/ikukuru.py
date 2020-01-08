@@ -129,6 +129,7 @@ class IkukuruSpider(scrapy.Spider):
             post['posted_at'] = posted_at
             post['site'] = "イククル"
             post['profile_id'] = ""
+            post['profile_url'] = ""
 
             last_posted_at = posted_at
 

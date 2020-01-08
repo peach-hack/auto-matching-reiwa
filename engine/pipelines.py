@@ -26,7 +26,8 @@ class MysqlPipeline(object):
                     posted_at=item['posted_at'],
                     genre=item['genre'],
                     prefecture=item['prefecture'],
-                    city=item['city'])
+                    city=item['city'],
+                    profile_url=item['profile_url'])
         self.session.merge(post)
         self.session.commit()
         return item

@@ -8,7 +8,8 @@ SELECT
   prefecture,
   city,
   id,
-  url
+  url,
+  profile_url
 FROM posts
 WHERE
   site = 'ハッピーメール'

@@ -124,6 +124,7 @@ class WakuwakuSpider(scrapy.Spider):
 
             post['site'] = "ワクワクメール"
             post['profile_id'] = ""
+            post['profile_url'] = ""
 
             last_posted_at = posted_at
             yield post
