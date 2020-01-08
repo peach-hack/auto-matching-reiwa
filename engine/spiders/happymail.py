@@ -153,6 +153,7 @@ class HappymailSpider(scrapy.Spider):
             post['posted_at'] = posted_at
 
             post['site'] = "ハッピーメール"
+            post['keyword'] = ""
 
             yield post
 

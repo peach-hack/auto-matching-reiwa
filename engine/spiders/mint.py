@@ -130,8 +130,6 @@ class MintSpider(scrapy.Spider):
                 continue
 
             post['id'] = id
-            post['profile_id'] = ""
-            post['profile_url'] = ""
             partial_url = item.css('dd>a::attr(href)').extract_first()
             post["url"] = MINT_BASE_URL + partial_url
 
@@ -171,6 +169,9 @@ class MintSpider(scrapy.Spider):
             post['posted_at'] = posted_at
 
             post['site'] = "ミントJメール"
+            post['profile_id'] = ""
+            post['profile_url'] = ""
+            post['keyword'] = ""
 
             yield post
 

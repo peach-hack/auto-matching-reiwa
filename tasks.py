@@ -10,6 +10,10 @@ def get_file_name_kanagawa(scrapy_name):
     return scrapy_name + "_kanagawa.csv"
 
 
+def get_file_name(scrapy_name):
+    return scrapy_name + ".csv"
+
+
 def get_file_path(file_name):
     RAWDATA_DIR = "./rawdata/"
     return RAWDATA_DIR + file_name
@@ -169,3 +173,24 @@ def crawl_from_cron(c):
     crawl_ikukuru(c, 1)
     crawl_mint(c)
     crawl_merupara(c)
+
+
+def create_search_command(keyword, scrapy_name, file_name):
+    return "scrapy crawl -a keyword={} {} -o {}".format(
+        keyword, scrapy_name, file_name)
+
+
+def search_base(keyword, name):
+    rawdata = get_file_path(get_file_name(name))
+
+    try:
+        invoke.run('rm {}'.format(rawdata))
+    except Exception:
+        pass
+    invoke.run(create_search_command(keyword, name, rawdata))
+
+
+@task
+def search_wakuwaku(c, keyword):
+    name = "wakuwaku_search"
+    search_base(keyword, name)

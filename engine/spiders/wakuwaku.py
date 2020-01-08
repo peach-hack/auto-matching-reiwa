@@ -1,12 +1,13 @@
 import scrapy
 # from scrapy.utils.response import open_in_browser
 from scrapy.http import Request
-
 import datetime
+
+from ..items.post import PostItem
 
 import engine.env as env
 
-from ..items.post import PostItem
+from .wakuwaku_base import WakuwakuBaseSpider
 
 WAKUWAKU_DOMAIN = '550909.com'
 WAKUWAKU_BASE_URL = 'https://550909.com'
@@ -30,10 +31,8 @@ WAKUWAKU_BOARD_MIDDLEAGE_URL = get_wakuwaku_board_url(15)
 WAKUWAKU_BOARD_KIKONSHA_URL = get_wakuwaku_board_url(21)
 
 
-class WakuwakuSpider(scrapy.Spider):
+class WakuwakuSpider(WakuwakuBaseSpider):
     name = 'wakuwaku'
-    allowed_domains = [WAKUWAKU_DOMAIN]
-    start_urls = [WAKUWAKU_LOGIN_URL]
 
     def __init__(self, area="神奈川県", days=7, *args, **kwargs):
         super(WakuwakuSpider, self).__init__(*args, **kwargs)
@@ -69,7 +68,7 @@ class WakuwakuSpider(scrapy.Spider):
         for board_url in board_url_list:
             yield Request(url=board_url + "&p=1", callback=self.parse_board)
 
-    def parse_board(self, response):
+    def parse_board(self, response, parse_next=True):
         post_list = response.css("ul.profile_list")
 
         if len(post_list) == 0:
@@ -125,12 +124,13 @@ class WakuwakuSpider(scrapy.Spider):
             post['site'] = "ワクワクメール"
             post['profile_id'] = ""
             post['profile_url'] = ""
+            post['keyword'] = ""
 
             last_posted_at = posted_at
             yield post
 
         days_ago = now - datetime.timedelta(days=self.days)
-        if last_posted_at > days_ago:
+        if parse_next and last_posted_at > days_ago:
             url_info = response.url.split("&p=")
             page_no = int(url_info[1])
             next_url = url_info[0] + "&p=" + str(page_no + 1)

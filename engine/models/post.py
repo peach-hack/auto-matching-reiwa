@@ -21,6 +21,7 @@ class Post(Base):
     genre = Column(String(20))
     prefecture = Column(String(10))
     city = Column(String(16))
+    keyword = Column(String(16))
     created_at = Column(DateTime, nullable=False, default=datetime.now)
     updated_at = Column(DateTime,
                         nullable=False,

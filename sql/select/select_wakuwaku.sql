@@ -8,7 +8,8 @@ SELECT
   prefecture,
   city,
   id,
-  url
+  url,
+  keyword
 FROM posts
 WHERE
   site = 'ワクワクメール'

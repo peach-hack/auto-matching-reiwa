@@ -15,3 +15,4 @@ class PostItem(scrapy.Item):
     genre = scrapy.Field()
     prefecture = scrapy.Field()
     city = scrapy.Field()
+    keyword = scrapy.Field()
