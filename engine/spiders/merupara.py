@@ -112,7 +112,7 @@ class MeruparaSpider(scrapy.Spider):
             time.sleep(1)
 
             scroll_counter += 1
-            if scroll_counter > 10:
+            if scroll_counter > 8:
                 break
 
         response_body = self.driver.page_source.encode('cp932', 'ignore')
