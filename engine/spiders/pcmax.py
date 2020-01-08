@@ -1,4 +1,5 @@
 import scrapy
+# from scrapy.utils.response import open_in_browser
 
 import time
 import datetime
@@ -123,6 +124,9 @@ class PcmaxSpider(scrapy.Spider):
             post['profile_id'] = item.css(
                 '.search_btn>a::attr(id)').extract_first()
             post["url"] = "https://pcmax.jp/mobile/bbs_detail.php?bbs_id=" + id
+            post[
+                'profile_url'] = "https://pcmax.jp/mobile/profile_detail.php?user_id=" + post[
+                    'profile_id']
 
             post["image_url"] = ""  # 小さすぎるのでとりあえずいらない
 

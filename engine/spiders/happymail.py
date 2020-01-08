@@ -3,6 +3,8 @@ import scrapy
 import time
 import datetime
 
+# from scrapy.utils.response import open_in_browser
+
 from selenium.webdriver import Chrome, ChromeOptions
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
@@ -76,11 +78,13 @@ class HappymailSpider(scrapy.Spider):
 
         # 掲示板へ移動
         self.driver.get(HAPPYMAIL_BOARD_URL)
+        time.sleep(3)
+
         # その他掲示板を選択
         self.driver.find_elements_by_css_selector(
             'li.ds_link_tab_item_bill')[1].click()
 
-        time.sleep(5)
+        time.sleep(3)
 
         try:
             while True:
@@ -100,11 +104,15 @@ class HappymailSpider(scrapy.Spider):
 
         for item in post_list:
             post = PostItem()
+            partial_url = item.css(
+                '.ds_post_button>a::attr(onclick)').extract_first().split(
+                    "');return")[0].split("(this, '")[1]
+            post['id'] = partial_url.split('Mid=')[1]
+            post['url'] = 'https:' + partial_url
 
             partial_url = item.css('a::attr(href)').extract_first()
-
-            post['id'] = partial_url.split('tid=')[1]
-            post["url"] = "https:" + partial_url
+            post['profile_id'] = partial_url.split('tid=')[1]
+            post["profile_url"] = "https:" + partial_url
 
             post["name"] = item.css(
                 '.ds_post_body_name_bill::text').extract_first().strip(
@@ -145,7 +153,6 @@ class HappymailSpider(scrapy.Spider):
             post['posted_at'] = posted_at
 
             post['site'] = "ハッピーメール"
-            post['profile_id'] = ""
 
             yield post
 
