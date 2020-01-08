@@ -8,7 +8,9 @@ SELECT
   prefecture,
   city,
   id,
-  url
+  profile_id,
+  url,
+  profile_url
 FROM posts
 WHERE
   site = 'PCMAX'

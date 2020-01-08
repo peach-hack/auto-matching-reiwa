@@ -8,6 +8,7 @@ SELECT
   prefecture,
   city,
   id,
+  profile_id,
   url,
   profile_url
 FROM posts

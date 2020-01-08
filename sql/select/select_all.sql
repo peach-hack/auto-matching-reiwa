@@ -13,7 +13,8 @@ SELECT
   created_at,
   updated_at,
   image_url,
-  profile_id
+  profile_id,
+  profile_url
 FROM posts
 ORDER BY
   posted_at DESC

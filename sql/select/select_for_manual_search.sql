@@ -8,7 +8,8 @@ SELECT
   genre,
   prefecture,
   city,
-  url
+  url,
+  profile_url
 FROM posts
 ORDER BY
   posted_at DESC
