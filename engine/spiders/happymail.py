@@ -103,8 +103,8 @@ class HappymailSpider(scrapy.Spider):
 
             partial_url = item.css('a::attr(href)').extract_first()
 
-            post['id'] = partial_url.split('tid=')[1]
-            post["url"] = "https:" + partial_url
+            post['profile_id'] = partial_url.split('tid=')[1]
+            post["profile_url"] = "https:" + partial_url
 
             post["name"] = item.css(
                 '.ds_post_body_name_bill::text').extract_first().strip(

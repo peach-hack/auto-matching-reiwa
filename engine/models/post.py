@@ -11,6 +11,7 @@ class Post(Base):
     id = Column(String(128), primary_key=True, autoincrement=False)
     site = Column(String(10))
     profile_id = Column(String(128))
+    profile_url = Column(String(200))
     name = Column(String(50))
     age = Column(String(10))
     title = Column(String(128))
