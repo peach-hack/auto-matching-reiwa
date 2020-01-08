@@ -3,6 +3,8 @@ import scrapy
 import time
 import datetime
 
+from scrapy.utils.response import open_in_browser
+
 from selenium.webdriver import Chrome, ChromeOptions
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
@@ -82,6 +84,10 @@ class HappymailSpider(scrapy.Spider):
 
         time.sleep(5)
 
+        response = response.replace(body=self.driver.page_source)
+        open_in_browser(response)
+        return
+
         try:
             while True:
                 script = 'window.scrollTo(0, document.body.scrollHeight);'
@@ -100,9 +106,13 @@ class HappymailSpider(scrapy.Spider):
 
         for item in post_list:
             post = PostItem()
+            partial_url = item.css(
+                '.ds_post_button>a::attr(onclick)').extract_first().split(
+                    "');return")[0].split("(this, '")[1]
+            post['id'] = partial_url.split('Mid=')[1]
+            post['url'] = 'https:' + partial_url
 
             partial_url = item.css('a::attr(href)').extract_first()
-
             post['profile_id'] = partial_url.split('tid=')[1]
             post["profile_url"] = "https:" + partial_url
 
@@ -145,7 +155,6 @@ class HappymailSpider(scrapy.Spider):
             post['posted_at'] = posted_at
 
             post['site'] = "ハッピーメール"
-            post['profile_id'] = ""
 
             yield post
 
