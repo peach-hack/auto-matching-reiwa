@@ -3,7 +3,7 @@ import scrapy
 import time
 import datetime
 
-from scrapy.utils.response import open_in_browser
+# from scrapy.utils.response import open_in_browser
 
 from selenium.webdriver import Chrome, ChromeOptions
 from selenium.webdriver.support.ui import WebDriverWait
@@ -78,15 +78,13 @@ class HappymailSpider(scrapy.Spider):
 
         # 掲示板へ移動
         self.driver.get(HAPPYMAIL_BOARD_URL)
+        time.sleep(3)
+
         # その他掲示板を選択
         self.driver.find_elements_by_css_selector(
             'li.ds_link_tab_item_bill')[1].click()
 
-        time.sleep(5)
-
-        response = response.replace(body=self.driver.page_source)
-        open_in_browser(response)
-        return
+        time.sleep(3)
 
         try:
             while True:
