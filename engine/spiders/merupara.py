@@ -17,8 +17,8 @@ MERUPARA_LOGIN_URL = "https://meru-para.com/msm/login"
 MERUPARA_ENTRY_URL = MERUPARA_BASE_URL + '/msm'
 MERUPARA_BOARD_URL = MERUPARA_ENTRY_URL + "/BBS/?sid=&ma=ad1&cid=0"
 
-MERUPARA_MOVE_TOKYO_URL = "https://meru-para.com/ms/mb/Prof.aspx?sid=&f=6&s=8&r=2"
-MERUPARA_MOVE_KANAGAWA_URL = "https://meru-para.com/ms/mb/Prof.aspx?sid=&f=6&s=9&r=2"
+MERUPARA_MOVE_TOKYO_URL = "https://meru-para.com/ms/mb/Prof.aspx?sid=&f=6&s=8&r=2"  # noqa
+MERUPARA_MOVE_KANAGAWA_URL = "https://meru-para.com/ms/mb/Prof.aspx?sid=&f=6&s=9&r=2"  # noqa
 
 
 class MeruparaSpider(scrapy.Spider):
