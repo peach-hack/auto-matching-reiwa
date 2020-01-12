@@ -86,8 +86,11 @@ class WakuwakuSpider(scrapy.Spider):
             post['id'] = partial_url.split('id=')[1]
             post["url"] = WAKUWAKU_BASE_URL + partial_url
 
-            post["name"] = item.css(
-                'p.profile__name::text').extract_first().strip()
+            try:
+                post["name"] = item.css(
+                    'p.profile__name::text').extract_first().strip()
+            except Exception:
+                post["name"] = ""
             post["prefecture"] = self.area
             post["genre"] = item.css(
                 'p.icon_bbs_category::text').extract_first().strip()
