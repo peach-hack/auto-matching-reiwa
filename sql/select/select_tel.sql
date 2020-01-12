@@ -8,7 +8,7 @@ SELECT
   genre,
   prefecture,
   city,
-  url,
+  url
 FROM posts
 WHERE
   genre LIKE '大人のﾒｰﾙ/TEL'

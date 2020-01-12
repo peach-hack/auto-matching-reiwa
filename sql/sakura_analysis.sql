@@ -30,7 +30,8 @@ SELECT
   profile_count,
   created_at,
   updated_at,
-  url
+  url,
+  profile_url
 FROM posts as p
 LEFT JOIN title_freqs ON title_f = p.title
 LEFT JOIN profile_freqs ON profile = CONCAT(name, '_', age, '_', city)
