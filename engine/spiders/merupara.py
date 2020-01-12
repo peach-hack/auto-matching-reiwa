@@ -92,7 +92,7 @@ class MeruparaSpider(scrapy.Spider):
             except Exception:
                 posted_at = datetime.datetime.strptime(posted_at_str,
                                                        '%Y/%m/%d %H:%M')
-            if now.month == 1 and posted_at.month == 12:
+            if posted_at.month > now.month:
                 last_posted_at = posted_at.replace(year=now.year - 1)
             else:
                 last_posted_at = posted_at.replace(year=now.year)
@@ -163,7 +163,7 @@ class MeruparaSpider(scrapy.Spider):
             except Exception:
                 posted_at = datetime.datetime.strptime(posted_at_str,
                                                        '%Y/%m/%d %H:%M')
-            if now.month == 1 and posted_at.month == 12:
+            if posted_at.month > now.month:
                 posted_at = posted_at.replace(year=now.year - 1)
             else:
                 posted_at = posted_at.replace(year=now.year)
