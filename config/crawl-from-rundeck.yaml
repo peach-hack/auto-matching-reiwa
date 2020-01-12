@@ -8,27 +8,27 @@
   schedule:
     dayofmonth:
       day: 1/1
-    month: '*'
+    month: "*"
     time:
-      hour: 0/1
-      minute: '0'
-      seconds: '0'
-    year: '*'
+      hour: 0-4,6-23/1
+      minute: "0"
+      seconds: "0"
+    year: "*"
   scheduleEnabled: false
   sequence:
     commands:
-    - description: ハッピーメール
-      exec: /home/tsu-nera/repo/auto-matching-reiwa/bin/crawl-from-rundeck-happymail.sh
-    - description: ワクワクメール
-      exec: /home/tsu-nera/repo/auto-matching-reiwa/bin/crawl-from-rundeck-wakuwaku.sh
-    - description: PCMAX
-      exec: /home/tsu-nera/repo/auto-matching-reiwa/bin/crawl-from-rundeck-pcmax.sh
-    - description: イククル
-      exec: /home/tsu-nera/repo/auto-matching-reiwa/bin/crawl-from-rundeck-ikukuru.sh
-    - description: ミントJメール
-      exec: /home/tsu-nera/repo/auto-matching-reiwa/bin/crawl-from-rundeck-mint.sh
-    - description: メルパラ
-      exec: /home/tsu-nera/repo/auto-matching-reiwa/bin/crawl-from-rundeck-merupara.sh
+      - description: ハッピーメール
+        exec: /home/tsu-nera/repo/auto-matching-reiwa/bin/crawl-from-rundeck-happymail.sh
+      - description: ワクワクメール
+        exec: /home/tsu-nera/repo/auto-matching-reiwa/bin/crawl-from-rundeck-wakuwaku.sh
+      - description: PCMAX
+        exec: /home/tsu-nera/repo/auto-matching-reiwa/bin/crawl-from-rundeck-pcmax.sh
+      - description: イククル
+        exec: /home/tsu-nera/repo/auto-matching-reiwa/bin/crawl-from-rundeck-ikukuru.sh
+      - description: ミントJメール
+        exec: /home/tsu-nera/repo/auto-matching-reiwa/bin/crawl-from-rundeck-mint.sh
+      - description: メルパラ
+        exec: /home/tsu-nera/repo/auto-matching-reiwa/bin/crawl-from-rundeck-merupara.sh
     keepgoing: true
     strategy: sequential
   uuid: e8a3e305-3c9d-4f6f-b1f5-b20dad294a9e
