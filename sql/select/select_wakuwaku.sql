@@ -9,6 +9,7 @@ SELECT
   city,
   id,
   url,
+  profile_url
 FROM posts
 WHERE
   site = 'ワクワクメール'
