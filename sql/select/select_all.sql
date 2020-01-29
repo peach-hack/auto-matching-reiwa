@@ -16,6 +16,8 @@ SELECT
   profile_id,
   profile_url
 FROM posts
+WHERE
+  posted_at < NOW()
 ORDER BY
   posted_at DESC
 LIMIT
