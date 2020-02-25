@@ -81,7 +81,7 @@ class WakuwakuSpider(scrapy.Spider):
 
             item = p.css("div.profile__item")
 
-            partial_url = item.css('a::attr(href)').extract_first()
+            partial_url = item.css('a::attr(href)').extract()[1]
 
             post['id'] = partial_url.split('id=')[1]
             post["url"] = WAKUWAKU_BASE_URL + partial_url

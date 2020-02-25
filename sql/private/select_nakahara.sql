@@ -8,10 +8,12 @@ SELECT
   genre,
   prefecture,
   city,
-  url
+  url,
+  profile_url
 FROM posts
 WHERE
   city LIKE '%中原区%'
   OR title LIKE '%小杉%'
+  OR city LIKE '%高津区%'
 ORDER BY
   posted_at DESC;

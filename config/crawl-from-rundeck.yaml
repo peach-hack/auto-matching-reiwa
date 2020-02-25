@@ -31,4 +31,5 @@
         exec: /home/tsu-nera/repo/auto-matching-reiwa/bin/crawl-from-rundeck-merupara.sh
     keepgoing: true
     strategy: sequential
+  timeout: 30m    
   uuid: e8a3e305-3c9d-4f6f-b1f5-b20dad294a9e
