@@ -21,15 +21,6 @@
 
 Tinderはモチベーションが高まったら対応します。
 
-### 対応サイト
-
-- [ハッピーメール](https://happymail.co.jp/?af14212217)
-- [ワクワクメール](https://550909.com/?f6858637)
-- [PCMAX](https://pcmax.jp/lp/?ad_id=rm181904)
-- [イククル](https://194964.com/AF1213451)
-- [ミントC!Jメール](https://mintj.com/?mdc=991&afguid=1iojxazbuotgo2d2n8pf4xszii)
-- [メルパラ](https://meru-para.com/?mdc=991&afguid=1y803u9dpjvt42admh2jxq7tv6)
-
 ## 新規環境構築
 
 最低限入れておくものを列挙しておく。
